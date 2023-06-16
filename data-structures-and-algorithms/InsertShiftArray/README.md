@@ -1,4 +1,4 @@
-# challange code(1) :Revaerse Array
+# challange code(1) :Insert Shift Array
 
 this is a simple code that will take an a array and value and insert it into the middle of the array for  example if it takes {2,5,6,7} and the value you want to insert is
 12 the output will be {2,5,12,6,7}
