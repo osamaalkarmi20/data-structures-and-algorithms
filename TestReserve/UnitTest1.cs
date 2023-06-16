@@ -7,18 +7,24 @@ namespace TestReserve
         [Fact]
         public void Test1()
         {
+            int value = 10;
             int[] array = { 3,4,5,6 };
-            int[] array2 = { 6, 5, 4, 3 };
-            int[] result = Program.ReverseArray(array);
-            Assert.Equal(result, array2);
+            int[] shifted = { 3, 4, 10, 5, 6 };
+           
+            int[] result = Program.InsertShiftArray(array ,value);
+            Assert.Equal(result, shifted);
         }
+
         [Fact]
         public void Test2()
         {
-            int[] array = {};
-            
-            int[] result = Program.ReverseArray(array);
-            Assert.Equal(result, null);
+            int value = 10;
+            int[] array = { };
+            int[] shifted = null;
+
+            int[] result = Program.InsertShiftArray(array, value);
+            Assert.Equal(result, shifted);
         }
+
     }
 }
