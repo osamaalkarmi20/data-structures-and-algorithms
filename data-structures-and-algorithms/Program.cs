@@ -1,46 +1,39 @@
 ﻿namespace data_structures_and_algorithms
 {
-   public class Program
+    public class Program
     {
         static void Main()
         {
-            int[] array = { 4,3,5,6 };
-            int midNum = 12;
-            int[] InsertArray = InsertShiftArray(array , midNum);
-            for (int i = 0; i < InsertArray.Length; i++)
-            {
-                Console.WriteLine(InsertArray[i]);
 
-            }
+            int[] array = { 1, 2, 3, 4, 5 };
+            int key = 4;
+            Console.WriteLine(BinarySearch(array, key));
+
         }
-        public static int[] InsertShiftArray(int[] array, int midNum)
-        {if (array.Length <= 0)
+
+
+        public static int BinarySearch(int[] array, int key)
+        {
+            int left = 0;
+            int right = array.Length - 1;
+
+            while (left <= right)
             {
-                return null;
+                int mid = left + (right - left) / 2;
+
+                if (array[mid] == key)
+                    return mid + 1;
+
+                if (array[mid] < key)
+                    left = mid + 1;
+                else
+                    right = mid - 1;
             }
-else
-            {
 
-                int[] newArray = new int[array.Length + 1];
-                int midIndex = array.Length / 2;
-
-                for (int i = 0, j = 0; i <= array.Length; i++, j++)
-                {
-                    if (i == midIndex)
-                    {
-                        newArray[i] = midNum;
-                        j--;
-                    }
-                    else
-                    {
-                        newArray[i] = array[j];
-                    }
-                }
-
-                return newArray;
-            }
-        
+            return -1;
         }
+
+
 
 
     }
