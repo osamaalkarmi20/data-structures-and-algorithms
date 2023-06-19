@@ -25,7 +25,7 @@
                     return mid + 1;
 
                 if (array[mid] < key)
-                    left = mid + 1;
+                    left = mid ;
                 else
                     right = mid - 1;
             }
