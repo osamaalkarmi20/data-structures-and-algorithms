@@ -4,11 +4,13 @@
     {
         static void Main()
         {
+
             int[] array = { 1, 2, 3, 4, 5 };
             int key = 4;
             Console.WriteLine(BinarySearch(array, key));
 
         }
+
 
         public static int BinarySearch(int[] array, int key)
         {
@@ -30,6 +32,7 @@
 
             return -1;
         }
+
 
 
 
