@@ -1,41 +1,37 @@
 ﻿namespace data_structures_and_algorithms
 {
-   public class Program
+    public class Program
     {
         static void Main()
         {
-            int[] array = { 4,3,5,6 };
-            for (int i = 0; i < array.Length; i++)
-            {
-                Console.Write($"{array[i]} ");
+            int[] array = { 1, 2, 3, 4, 5 };
+            int key = 4;
+            Console.WriteLine(BinarySearch(array, key));
 
-            }
-            Console.Write(" ");
-            int[] reversedArray = ReverseArray(array);
-            for (int i = 0; i < reversedArray.Length; i++)
-            {
-                Console.WriteLine(reversedArray[i]);
-
-            }
         }
-        public static int[] ReverseArray(int[] oldArray)
+
+        public static int BinarySearch(int[] array, int key)
         {
-            if (oldArray.Length <= 0)
-            { return null; 
-            }
-            else
-            {
-                int[] newArray = new int[oldArray.Length];
-                int newArrayIndex = 0;
-                for (int i = oldArray.Length-1; i >= 0; i--)
-                {
-                    newArray[newArrayIndex] = oldArray[i];
-                    newArrayIndex++;
-                }
-                return newArray;
+            int left = 0;
+            int right = array.Length - 1;
 
+            while (left <= right)
+            {
+                int mid = left + (right - left) / 2;
+
+                if (array[mid] == key)
+                    return mid + 1;
+
+                if (array[mid] < key)
+                    left = mid + 1;
+                else
+                    right = mid - 1;
             }
+
+            return -1;
         }
+
+
 
     }
 }
