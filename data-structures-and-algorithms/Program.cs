@@ -1,40 +1,85 @@
 ﻿namespace data_structures_and_algorithms
 {
-    public class Program
-    {
-        static void Main()
+    
+        public class Program
         {
+            static void Main(string[] args)
+            {
+                LinkedList linkedList = new LinkedList();
+                linkedList.Insert(3);
+                linkedList.Insert(2);
 
-            int[] array = { 1, 2, 3, 4, 5 };
-            int key = 4;
-            Console.WriteLine(BinarySearch(array, key));
-
+                bool exists = linkedList.Includes(2);
+                Console.WriteLine($"Value 2 exists: {exists}");
+                exists = linkedList.Includes(4);
+                Console.WriteLine($"Value 4 exists: {exists}");
+                Console.WriteLine(linkedList.ToString());
+            }
         }
 
-
-        public static int BinarySearch(int[] array, int key)
+        public class Node
         {
-            int left = 0;
-            int right = array.Length - 1;
+            public int Value { get; set; }
+            public Node Next { get; set; }
 
-            while (left <= right)
+            public Node(int value)
             {
-                int mid = left + (right - left) / 2;
+                Value = value;
+                Next = null;
+            }
+        }
 
-                if (array[mid] == key)
-                    return mid + 1;
+        public class LinkedList
+        {
+            public Node Head { get; set; }
+            public Node Tail { get; set; }
 
-                if (array[mid] < key)
-                    left = mid ;
-                else
-                    right = mid - 1;
+            public LinkedList()
+            {
+                Head = null;
+                Tail = null;
             }
 
-            return -1;
+            public void Insert(int value)
+            {
+                Node newNode = new Node(value);
+                if (Head == null)
+                {
+                    Head = newNode;
+                    Tail = newNode;
+                }
+                else
+                {
+                    Tail.Next = newNode;
+                    Tail = newNode;
+                }
+            }
+
+            public bool Includes(int value)
+            {
+                Node position = Head;
+                while (position != null)
+                {
+                    if (position.Value == value)
+                    {
+                        return true;
+                    }
+                    position = position.Next;
+                }
+                return false;
+            }
+
+            public string ToString()
+            {
+                Node current = Head;
+                string result = "";
+                while (current != null)
+                {
+                    result += $"{{ {current.Value} }} -> ";
+                    current = current.Next;
+                }
+                result += "NULL";
+                return result;
+            }
         }
-
-
-
-
     }
-}
