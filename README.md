@@ -9,3 +9,5 @@ this repo is made to submit the code challanges .
 [challenge 3 :binary  Search](/data-structures-and-algorithms/binarySearch/README.md)
 
 [challenge 4 :linked list](/data-structures-and-algorithms/linked-list/README.md)
+
+[challenge 6 :linked list insertions](/data-structures-and-algorithms/linked-list-insertions/README.md)
