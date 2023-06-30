@@ -5,16 +5,21 @@
         {
             static void Main(string[] args)
             {
-                LinkedList linkedList = new LinkedList();
-                linkedList.Insert(3);
-                linkedList.Insert(2);
+            LinkedList linkedList = new LinkedList();
+            linkedList.Append(1);
+            linkedList.Append(3);
+            linkedList.Append(4);
 
-                bool exists = linkedList.Includes(2);
-                Console.WriteLine($"Value 2 exists: {exists}");
-                exists = linkedList.Includes(4);
-                Console.WriteLine($"Value 4 exists: {exists}");
-                Console.WriteLine(linkedList.ToString());
-            }
+            bool exists = linkedList.Includes(3);
+            Console.WriteLine($"Value 3 exists: {exists}");
+            exists = linkedList.Includes(2);
+            Console.WriteLine($"Value 2 exists: {exists}");
+
+            linkedList.InsertBefore(3, 2);
+            linkedList.InsertAfter(4, 5);
+
+            Console.WriteLine(linkedList.ToString());
+        }
         }
 
         public class Node
@@ -40,7 +45,7 @@
                 Tail = null;
             }
 
-            public void Insert(int value)
+            public void Append(int value)
             {
                 Node newNode = new Node(value);
                 if (Head == null)
@@ -69,7 +74,50 @@
                 return false;
             }
 
-            public string ToString()
+        public void InsertBefore(int value, int newValue)
+        {
+            if (Head == null)
+                return;
+
+            if (Head.Value == value)
+            {
+                Node newNode = new Node(newValue);
+                newNode.Next = Head;
+                Head = newNode;
+                return;
+            }
+
+            Node current = Head;
+            while (current.Next != null)
+            {
+                if (current.Next.Value == value)
+                {
+                    Node newNode = new Node(newValue);
+                    newNode.Next = current.Next;
+                    current.Next = newNode;
+                    return;
+                }
+                current = current.Next;
+            }
+        }
+        public void InsertAfter(int value, int newValue)
+        {
+            Node current = Head;
+            while (current != null)
+            {
+                if (current.Value == value)
+                {
+                    Node newNode = new Node(newValue);
+                    newNode.Next = current.Next;
+                    current.Next = newNode;
+                    if (current == Tail)
+                        Tail = newNode;
+                    return;
+                }
+                current = current.Next;
+            }
+        }
+        public string ToString()
             {
                 Node current = Head;
                 string result = "";
