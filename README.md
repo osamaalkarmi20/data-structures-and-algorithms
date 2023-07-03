@@ -11,3 +11,5 @@ this repo is made to submit the code challanges .
 [challenge 4 :linked list](/data-structures-and-algorithms/linked-list/README.md)
 
 [challenge 6 :linked list insertions](/data-structures-and-algorithms/linked-list-insertions/README.md)
+
+[challenge 7 :linked list kth](/data-structures-and-algorithms/linked-list-kth/README.md)
