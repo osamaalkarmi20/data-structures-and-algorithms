@@ -3,172 +3,121 @@
 namespace data_structures_and_algorithms
 {
 
-    public class Program
-    {
-        static void Main(string[] args)
-        {//code challenge 6
-            Console.WriteLine("CC6");
-            LinkedList linkedList = new LinkedList();
-            linkedList.Append(1);
-            linkedList.Append(3);
-            linkedList.Append(4);
 
-            bool exists = linkedList.Includes(3);
-            Console.WriteLine($"Value 3 exists: {exists}");
-            exists = linkedList.Includes(2);
-            Console.WriteLine($"Value 2 exists: {exists}");
-
-            linkedList.InsertBefore(3, 2);
-            linkedList.InsertAfter(4, 5);
-            Console.WriteLine(linkedList.ToString());
-            //code challenge 6
-            Console.WriteLine("CC7");
-            LinkedList List = new LinkedList();
-            List.Append(1);
-            List.Append(3);
-            List.Append(8);
-            List.Append(2);
-            int k = 3;
-            string kthValue = List.KthFromEnd(k);
-            Console.WriteLine($"Value at {k} places from the tail: {kthValue}");
-            Console.WriteLine(List.ToString());
-        }
-    }
-
-    public class Node
-    {
-        public int Value { get; set; }
-        public Node Next { get; set; }
-
-        public Node(int value)
+        public class Program
         {
-            Value = value;
-            Next = null;
-        }
-    }
-
-    public class LinkedList
-    {
-        public Node Head { get; set; }
-        public Node Tail { get; set; }
-
-        public LinkedList()
-        {
-            Head = null;
-            Tail = null;
-        }
-
-        public void Append(int value)
-        {
-            Node newNode = new Node(value);
-            if (Head == null)
+            static void Main(string[] args)
             {
-                Head = newNode;
-                Tail = newNode;
+                LinkedList list1 = new LinkedList();
+                list1.Append(1);
+                list1.Append(3);
+                list1.Append(5);
+                LinkedList list2 = new LinkedList();
+                list2.Append(0);
+                list2.Append(0);
+                list2.Append(0);
+
+                LinkedList list3 = new LinkedList();
+                list3 = LinkedList.zipList(list1, list2);
+
+                // Traverse and print the zipped list
+                Console.WriteLine(list3.ToString());
             }
-            else
+            public class Node
             {
-                Tail.Next = newNode;
-                Tail = newNode;
-            }
-        }
+                public int Value { get; set; }
+                public Node Next { get; set; }
 
-        public bool Includes(int value)
-        {
-            Node position = Head;
-            while (position != null)
-            {
-                if (position.Value == value)
+                public Node(int value)
                 {
-                    return true;
+                    Value = value;
+                    Next = null;
                 }
-                position = position.Next;
-            }
-            return false;
-        }
-
-        public void InsertBefore(int value, int newValue)
-        {
-            if (Head == null)
-                return;
-
-            if (Head.Value == value)
-            {
-                Node newNode = new Node(newValue);
-                newNode.Next = Head;
-                Head = newNode;
-                return;
             }
 
-            Node current = Head;
-            while (current.Next != null)
+            public class LinkedList
             {
-                if (current.Next.Value == value)
+                public Node Head { get; set; }
+                public Node Tail { get; set; }
+
+                public LinkedList()
                 {
-                    Node newNode = new Node(newValue);
-                    newNode.Next = current.Next;
-                    current.Next = newNode;
-                    return;
+                    Head = null;
+                    Tail = null;
                 }
-                current = current.Next;
-            }
-        }
-        public void InsertAfter(int value, int newValue)
-        {
-            Node current = Head;
-            while (current != null)
-            {
-                if (current.Value == value)
+
+                public void Append(int value)
                 {
-                    Node newNode = new Node(newValue);
-                    newNode.Next = current.Next;
-                    current.Next = newNode;
-                    if (current == Tail)
+                    Node newNode = new Node(value);
+                    if (Head == null)
+                    {
+                        Head = newNode;
                         Tail = newNode;
-                    return;
+                    }
+                    else
+                    {
+                        Tail.Next = newNode;
+                        Tail = newNode;
+                    }
                 }
-                current = current.Next;
+
+                public string ToString()
+                {
+                    Node current = Head;
+                    string result = "";
+                    while (current != null)
+                    {
+                        result += $"{{ {current.Value} }} -> ";
+                        current = current.Next;
+                    }
+                    result += "NULL";
+                    return result;
+                }
+
+                public static LinkedList zipList(LinkedList list1, LinkedList list2)
+                {
+                    LinkedList list3 = new LinkedList();
+
+                    Node pointer1 = list1.Head;
+                    Node pointer2 = list2.Head;
+
+                    while (pointer1 != null && pointer2 != null)
+                    {
+                        list3.Append(pointer1.Value);
+                        list3.Append(pointer2.Value);
+
+                        pointer1 = pointer1.Next;
+                        pointer2 = pointer2.Next;
+                    }
+
+                    // Append any remaining nodes from list1
+                    while (pointer1 != null)
+                    {
+                        list3.Append(pointer1.Value);
+                        pointer1 = pointer1.Next;
+                    }
+
+                    // Append any remaining nodes from list2
+                    while (pointer2 != null)
+                    {
+                        list3.Append(pointer2.Value);
+                        pointer2 = pointer2.Next;
+                    }
+
+                    return list3;
+                }
             }
+
+
         }
-        public string ToString()
-        {
-            Node current = Head;
-            string result = "";
-            while (current != null)
-            {
-                result += $"{{ {current.Value} }} -> ";
-                current = current.Next;
-            }
-            result += "NULL";
-            return result;
-        }
-        public string KthFromEnd(int k)
-        {
-            if (Head == null)
-                return "The linked list is empty.";
-            Node current = Head;
-            Node kthNode = Head;
-
-            for (int i = 0; i < k; i++)
-            {
-                if (current == null)
-                    return "out of range";
-                current = current.Next;
-            }
-            while (current.Next != null)
-            {
-                current = current.Next;
-                kthNode = kthNode.Next;
-            }
-
-            return $"{kthNode.Value}";
-
-        }
-
     }
 
 
 
 
-}
+
+
+
+
+
 
