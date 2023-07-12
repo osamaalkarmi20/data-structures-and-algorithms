@@ -4,113 +4,151 @@ namespace data_structures_and_algorithms
 {
 
 
-        public class Program
+    public class Program
+    {
+        static void Main(string[] args)
         {
-            static void Main(string[] args)
+            Stack stack = new Stack();
+            Console.WriteLine(stack.IsEmpty());  
+
+            stack.Push(10);
+            stack.Push(20);
+            int peekValue = stack.Peek();
+            Console.WriteLine(peekValue); 
+
+            int popValue = stack.Pop();
+            Console.WriteLine(popValue);  
+            //query:
+            Console.WriteLine("???????????????????????????????????????");  
+            Queue queue = new Queue();
+            Console.WriteLine(queue.IsEmpty()); 
+
+            queue.Enqueue(10);
+            queue.Enqueue(20);
+            int peekValueQueue = queue.Peek();
+            Console.WriteLine(peekValueQueue); 
+
+            int dequeueValue = queue.Dequeue();
+            Console.WriteLine(dequeueValue);  
+        }
+        public class Node
+        {
+            public int Value { get; set; }
+            public Node Next { get; set; }
+
+            public Node(int value)
             {
-                LinkedList list1 = new LinkedList();
-                list1.Append(1);
-                list1.Append(3);
-                list1.Append(5);
-                LinkedList list2 = new LinkedList();
-                list2.Append(0);
-                list2.Append(0);
-                list2.Append(0);
-
-                LinkedList list3 = new LinkedList();
-                list3 = LinkedList.zipList(list1, list2);
-
-                // Traverse and print the zipped list
-                Console.WriteLine(list3.ToString());
+                Value = value;
+                Next = null;
             }
-            public class Node
+        }
+        public class Stack
+        {
+            private Node top;
+
+            public Stack()
             {
-                public int Value { get; set; }
-                public Node Next { get; set; }
-
-                public Node(int value)
-                {
-                    Value = value;
-                    Next = null;
-                }
+                top = null;
             }
 
-            public class LinkedList
+
+
+            public void Push(int value)
             {
-                public Node Head { get; set; }
-                public Node Tail { get; set; }
-
-                public LinkedList()
-                {
-                    Head = null;
-                    Tail = null;
-                }
-
-                public void Append(int value)
-                {
-                    Node newNode = new Node(value);
-                    if (Head == null)
-                    {
-                        Head = newNode;
-                        Tail = newNode;
-                    }
-                    else
-                    {
-                        Tail.Next = newNode;
-                        Tail = newNode;
-                    }
-                }
-
-                public string ToString()
-                {
-                    Node current = Head;
-                    string result = "";
-                    while (current != null)
-                    {
-                        result += $"{{ {current.Value} }} -> ";
-                        current = current.Next;
-                    }
-                    result += "NULL";
-                    return result;
-                }
-
-                public static LinkedList zipList(LinkedList list1, LinkedList list2)
-                {
-                    LinkedList list3 = new LinkedList();
-
-                    Node pointer1 = list1.Head;
-                    Node pointer2 = list2.Head;
-
-                    while (pointer1 != null && pointer2 != null)
-                    {
-                        list3.Append(pointer1.Value);
-                        list3.Append(pointer2.Value);
-
-                        pointer1 = pointer1.Next;
-                        pointer2 = pointer2.Next;
-                    }
-
-                    // Append any remaining nodes from list1
-                    while (pointer1 != null)
-                    {
-                        list3.Append(pointer1.Value);
-                        pointer1 = pointer1.Next;
-                    }
-
-                    // Append any remaining nodes from list2
-                    while (pointer2 != null)
-                    {
-                        list3.Append(pointer2.Value);
-                        pointer2 = pointer2.Next;
-                    }
-
-                    return list3;
-                }
+                Node newNode = new Node(value);
+                newNode.Next = top;
+                top = newNode;
             }
+
+            public int Pop()
+            {
+                if (IsEmpty())
+                    throw new InvalidOperationException("Stack is empty");
+
+                int value = top.Value;
+                top = top.Next;
+                return value;
+            }
+
+            public int Peek()
+            {
+                if (IsEmpty())
+                    throw new InvalidOperationException("Stack is empty");
+
+                return top.Value;
+            }
+
+            public bool IsEmpty()
+            {
+                return top == null;
+            }
+
 
 
         }
+
+
+        public class Queue
+        {
+            private Node front;
+            private Node rear;
+
+            public Queue()
+            {
+                front = null;
+                rear = null;
+            }
+
+            public void Enqueue(int value)
+            {
+                Node newNode = new Node(value);
+
+                if (IsEmpty())
+                {
+                    front = newNode;
+                    rear = newNode;
+                }
+                else
+                {
+                    rear.Next = newNode;
+                    rear = newNode;
+                }
+            }
+
+            public int Dequeue()
+            {
+                if (IsEmpty())
+                {
+                    throw new InvalidOperationException("Queue is empty");
+                }
+
+                int value = front.Value;
+                front = front.Next;
+
+                if (front == null)
+                    rear = null;
+
+                return value;
+            }
+
+            public int Peek()
+            {
+                if (IsEmpty())
+                    throw new InvalidOperationException("Queue is empty");
+
+                return front.Value;
+            }
+
+            public bool IsEmpty()
+            {
+                return front == null;
+            }
+        }
+
+
+
     }
+}
 
 
 
