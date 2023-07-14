@@ -1,13 +1,13 @@
-﻿# challenge (10) : Stack & Queue (pseudo)
+# challenge (11) : Stack & Queue (pseudo)
 ## explanation
 this is a code for stack and queue that operates on the stack and the queue as some operations as for stack : pop , push , isEmpty and peek .
 and also the queue has opreatitions such as: Enqueue,Dequeue . using the 2 stacks to do the opreations of Enqueue and Dequeue. 
 
 ## whiteboard:
-![white](stackqueue.png)
+![white](2stack.png)
 
 ## walkthrough :
-
+![run](3stack.png)
  walkthrough of the code:
 
 
