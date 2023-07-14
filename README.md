@@ -18,3 +18,6 @@ this repo is made to submit the code challanges .
 
 
 [challenge 10 :Stack & Queue](/data-structures-and-algorithms/stack-and-queue/README.md)
+
+
+[challenge 11 : Stack & Queue-pseudo](/data-structures-and-algorithms/stackQueuePseudo/README.md)
