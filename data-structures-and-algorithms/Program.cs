@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
 namespace data_structures_and_algorithms
 {
@@ -8,28 +9,19 @@ namespace data_structures_and_algorithms
     {
         static void Main(string[] args)
         {
-            Stack stack = new Stack();
-            Console.WriteLine(stack.IsEmpty());  
 
-            stack.Push(10);
-            stack.Push(20);
-            int peekValue = stack.Peek();
-            Console.WriteLine(peekValue); 
-
-            int popValue = stack.Pop();
-            Console.WriteLine(popValue);  
             //query:
-            Console.WriteLine("???????????????????????????????????????");  
+            Console.WriteLine("???????????????????????????????????????");
             Queue queue = new Queue();
-            Console.WriteLine(queue.IsEmpty()); 
 
-            queue.Enqueue(10);
-            queue.Enqueue(20);
-            int peekValueQueue = queue.Peek();
-            Console.WriteLine(peekValueQueue); 
+            queue.Enqueue(1);
+            queue.Enqueue(2);
+            queue.Enqueue(3);
+            queue.Enqueue(4);
 
             int dequeueValue = queue.Dequeue();
-            Console.WriteLine(dequeueValue);  
+            Console.WriteLine(dequeueValue);
+
         }
         public class Node
         {
@@ -70,12 +62,12 @@ namespace data_structures_and_algorithms
                 return value;
             }
 
-            public int Peek()
+            public Node Peek()
             {
                 if (IsEmpty())
                     throw new InvalidOperationException("Stack is empty");
 
-                return top.Value;
+                return top;
             }
 
             public bool IsEmpty()
@@ -87,71 +79,45 @@ namespace data_structures_and_algorithms
 
         }
 
-
-        public class Queue
+        class Queue
         {
-            private Node front;
-            private Node rear;
+            private Stack stack1;
+            private Stack stack2;
 
             public Queue()
             {
-                front = null;
-                rear = null;
+                stack1 = new Stack();
+                stack2 = new Stack();
             }
 
             public void Enqueue(int value)
             {
-                Node newNode = new Node(value);
 
-                if (IsEmpty())
+                while (!stack2.IsEmpty())
                 {
-                    front = newNode;
-                    rear = newNode;
+                    stack1.Push(stack2.Pop());
                 }
-                else
-                {
-                    rear.Next = newNode;
-                    rear = newNode;
-                }
+
+                stack1.Push(value);
             }
 
             public int Dequeue()
             {
-                if (IsEmpty())
+
+                while (!stack1.IsEmpty())
                 {
-                    throw new InvalidOperationException("Queue is empty");
+                    stack2.Push(stack1.Pop());
                 }
 
-                int value = front.Value;
-                front = front.Next;
-
-                if (front == null)
-                    rear = null;
-
-                return value;
-            }
-
-            public int Peek()
-            {
-                if (IsEmpty())
-                    throw new InvalidOperationException("Queue is empty");
-
-                return front.Value;
-            }
-
-            public bool IsEmpty()
-            {
-                return front == null;
+                return stack2.Pop();
             }
         }
 
 
 
+
     }
 }
-
-
-
 
 
 
