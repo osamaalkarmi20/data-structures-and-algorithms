@@ -79,7 +79,7 @@ namespace data_structures_and_algorithms
 
         }
 
-        class Queue
+       public class Queue
         {
             private Stack stack1;
             private Stack stack2;
