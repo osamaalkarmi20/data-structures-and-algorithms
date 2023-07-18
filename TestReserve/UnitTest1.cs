@@ -9,7 +9,7 @@ namespace TestReserve
     public class UnitTest1
     {
         [Fact]
-        public void PeekThrowsExceptionQueue()
+        public void EnqueueDequeueQueue()
         {
             Program.Queue queue = new Program.Queue();
 
@@ -23,7 +23,7 @@ namespace TestReserve
 
         }
         [Fact]
-        public void PopThrowsException()
+        public void DequeueThrowsException()
         {
             Program.Queue queue = new Program.Queue();
             
