@@ -1,13 +1,13 @@
 # challenge (11) : Stack & Queue (pseudo)
 ## explanation
 this is a code for stack and queue that operates on the stack and the queue as some operations as for stack : pop , push , isEmpty and peek .
-and also the queue has opreatitions such as: Enqueue,Dequeue . using the 2 stacks to do the opreations of Enqueue and Dequeue. 
+and also the queue has oprations such as: Enqueue,Dequeue . using the 2 stacks to do the opreations of Enqueue and Dequeue. 
 
 ## whiteboard:
-![white](2stack.png)
+![white](stackqueue.png)
 
 ## walkthrough :
-![run](3stack.png)
+
  walkthrough of the code:
 
 
@@ -167,4 +167,45 @@ namespace data_structures_and_algorithms
 
 
 ```
+## test unit:
 
+![test](cc.png)
+
+```c#
+
+using data_structures_and_algorithms;
+using System.Collections;
+using System.Collections.Generic;
+using static data_structures_and_algorithms.Program;
+
+namespace TestReserve
+{
+
+    public class UnitTest1
+    {
+        [Fact]
+        public void PeekThrowsExceptionQueue()
+        {
+            Program.Queue queue = new Program.Queue();
+
+            queue.Enqueue(1);
+            queue.Enqueue(2);
+            queue.Enqueue(3);
+            queue.Enqueue(4);
+
+            int dequeueValue = queue.Dequeue();
+            Assert.Equal(1, dequeueValue);
+
+        }
+        [Fact]
+        public void PopThrowsException()
+        {
+            Program.Queue queue = new Program.Queue();
+            
+            Assert.Throws<InvalidOperationException>(() => queue.Dequeue());
+        }
+
+    }
+
+}
+```
