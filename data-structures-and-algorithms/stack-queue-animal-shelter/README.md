@@ -1,4 +1,26 @@
-﻿
+﻿# challenge (12) : AnimalShelter
+## explanation
+this is a code for an animal shelter that takes the objects and add them as an queue and stores them individually as into 2 queues :  dogs and cats.
+
+## whiteboard:
+![white](white.png)
+
+![run](run.png)
+
+## walkthrough :
+
+ walkthrough of the code:
+
+
+The AnimalShelter class is the main component of the Animal Shelter. It has two private Queue<Animal> objects, dogs, and cats, to hold dogs and cats respectively.
+
+The Enqueue method takes an Animal object and adds it to the appropriate queue based on its species.
+
+The Dequeue method takes a preference ("dog" or "cat") and dequeues an animal from the corresponding queue. If no matching animal is found, it returns null
+
+## code:
+```c#
+
 using System.Collections.Generic;
 
 namespace data_structures_and_algorithms
@@ -143,12 +165,57 @@ namespace data_structures_and_algorithms
 
 }
 
+```
+## test unit:
 
+![test](test.png)
 
+```c#
+using data_structures_and_algorithms;
+using System.Collections;
+using System.Collections.Generic;
+using static data_structures_and_algorithms.Program;
 
+namespace TestReserve
+{
 
+    public class UnitTest1
+    {
+        [Fact]
+        public void AddingToCatsAndDogsAndDequeueCat()
+        {
+            AnimalShelter shelter = new AnimalShelter();
+            shelter.Enqueue(new Animal("dog", "taz"));
+            shelter.Enqueue(new Animal("dog", "nody"));
+            shelter.Enqueue(new Animal("cat", "olive"));
+            shelter.Enqueue(new Animal("cat", "carmel"));
 
+            Animal res = new Animal("cat", "olive");
+            Assert.Equal(res.Name, shelter.Dequeue("cat").Name);
+        }
 
+        [Fact]
+        public void AddingToCatsAndDogsAndDequeueDog()
+        {
+            AnimalShelter shelter = new AnimalShelter();
+            shelter.Enqueue(new Animal("dog", "taz"));
+            shelter.Enqueue(new Animal("dog", "nody"));
+            shelter.Enqueue(new Animal("cat", "olive"));
+            shelter.Enqueue(new Animal("cat", "carmel"));
 
+            Animal res = new Animal("dog", "taz");
+            Assert.Equal(res.Name, shelter.Dequeue("dog").Name);
+        }  [Fact]
+        public void DequeueReturnNull()
+        {
+            AnimalShelter shelter = new AnimalShelter();
+            shelter.Enqueue(new Animal("dog", "taz"));
+            shelter.Enqueue(new Animal("dog", "nody"));
+            shelter.Enqueue(new Animal("cat", "olive"));
+            shelter.Enqueue(new Animal("cat", "carmel"));
 
-
+            Assert.Equal(null, shelter.Dequeue("rabbits"));
+        }
+    }
+}
+```
