@@ -21,3 +21,5 @@ this repo is made to submit the code challanges .
 
 
 [challenge 11 : Stack & Queue-pseudo](/data-structures-and-algorithms/stackQueuePseudo/README.md)
+
+[challenge 12:Animal Shelter](/data-structures-and-algorithms/stack-queue-animal-shelter/README.md)
