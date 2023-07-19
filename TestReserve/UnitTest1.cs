@@ -9,29 +9,41 @@ namespace TestReserve
     public class UnitTest1
     {
         [Fact]
-        public void EnqueueDequeueQueue()
+        public void AddingToCatsAndDogsAndDequeueCat()
         {
-            Program.Queue queue = new Program.Queue();
+            AnimalShelter shelter = new AnimalShelter();
+            shelter.Enqueue(new Animal("dog", "taz"));
+            shelter.Enqueue(new Animal("dog", "nody"));
+            shelter.Enqueue(new Animal("cat", "olive"));
+            shelter.Enqueue(new Animal("cat", "carmel"));
 
-            queue.Enqueue(1);
-            queue.Enqueue(2);
-            queue.Enqueue(3);
-            queue.Enqueue(4);
-
-            int dequeueValue = queue.Dequeue();
-            Assert.Equal(1, dequeueValue);
-
+            Animal res = new Animal("cat", "olive");
+            Assert.Equal(res.Name, shelter.Dequeue("cat").Name);
         }
+
         [Fact]
-        public void DequeueThrowsException()
+        public void AddingToCatsAndDogsAndDequeueDog()
         {
-            Program.Queue queue = new Program.Queue();
-            
-            Assert.Throws<InvalidOperationException>(() => queue.Dequeue());
+            AnimalShelter shelter = new AnimalShelter();
+            shelter.Enqueue(new Animal("dog", "taz"));
+            shelter.Enqueue(new Animal("dog", "nody"));
+            shelter.Enqueue(new Animal("cat", "olive"));
+            shelter.Enqueue(new Animal("cat", "carmel"));
+
+            Animal res = new Animal("dog", "taz");
+            Assert.Equal(res.Name, shelter.Dequeue("dog").Name);
+        }  [Fact]
+        public void DequeueReturnNull()
+        {
+            AnimalShelter shelter = new AnimalShelter();
+            shelter.Enqueue(new Animal("dog", "taz"));
+            shelter.Enqueue(new Animal("dog", "nody"));
+            shelter.Enqueue(new Animal("cat", "olive"));
+            shelter.Enqueue(new Animal("cat", "carmel"));
+
+            Assert.Equal(null, shelter.Dequeue("rabbits"));
         }
-
     }
-
 }
 
 
