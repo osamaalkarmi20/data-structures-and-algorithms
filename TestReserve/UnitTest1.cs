@@ -8,41 +8,27 @@ namespace TestReserve
 
     public class UnitTest1
     {
-        [Fact]
-        public void AddingToCatsAndDogsAndDequeueCat()
+        [Theory]
+        [InlineData( "(dfdfdfdf)", true)]
+        [InlineData("(dfdfdfdf)}", false)]
+        [InlineData("{(dfdfdfdf)", false)]
+        [InlineData("(dfdfdfdf}", false)]
+        [InlineData("{dfdfdfdf)", false)]
+        [InlineData("dfdfdfdf)(", false)]
+        [InlineData("{dfdfdfdf}", true)]
+        [InlineData("[dfdfdfdf]", true)]
+        public void brackets(string teststring,bool expected)
         {
-            AnimalShelter shelter = new AnimalShelter();
-            shelter.Enqueue(new Animal("dog", "taz"));
-            shelter.Enqueue(new Animal("dog", "nody"));
-            shelter.Enqueue(new Animal("cat", "olive"));
-            shelter.Enqueue(new Animal("cat", "carmel"));
+            
 
-            Animal res = new Animal("cat", "olive");
-            Assert.Equal(res.Name, shelter.Dequeue("cat").Name);
+            // Act
+            bool result = BracketsBalanced(teststring);
+
+            // Assert
+            Assert.Equal(expected, result);
         }
-
-        [Fact]
-        public void AddingToCatsAndDogsAndDequeueDog()
-        {
-            AnimalShelter shelter = new AnimalShelter();
-            shelter.Enqueue(new Animal("dog", "taz"));
-            shelter.Enqueue(new Animal("dog", "nody"));
-            shelter.Enqueue(new Animal("cat", "olive"));
-            shelter.Enqueue(new Animal("cat", "carmel"));
-
-            Animal res = new Animal("dog", "taz");
-            Assert.Equal(res.Name, shelter.Dequeue("dog").Name);
-        }  [Fact]
-        public void DequeueReturnNull()
-        {
-            AnimalShelter shelter = new AnimalShelter();
-            shelter.Enqueue(new Animal("dog", "taz"));
-            shelter.Enqueue(new Animal("dog", "nody"));
-            shelter.Enqueue(new Animal("cat", "olive"));
-            shelter.Enqueue(new Animal("cat", "carmel"));
-
-            Assert.Equal(null, shelter.Dequeue("rabbits"));
-        }
+   
+      
     }
 }
 
