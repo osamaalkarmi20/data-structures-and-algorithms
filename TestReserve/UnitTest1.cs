@@ -2,6 +2,7 @@ using data_structures_and_algorithms;
 using System.Collections;
 using System.Collections.Generic;
 using static data_structures_and_algorithms.Program;
+using static data_structures_and_algorithms.Program.BinaryTree;
 
 namespace TestReserve
 {
@@ -12,161 +13,68 @@ namespace TestReserve
         public class BinarySearchTreeTests
         {
             [Fact]
-            public void CanInstantiateEmptyTree()
+            public void TestEmptyTree()
             {
-                // Arrange
-                BinarySeartchTree<int> binarySearchTree = new BinarySeartchTree<int>();
-
-                // Act & Assert
-                Assert.Null(binarySearchTree.Root);
+                BinarySearchTree testTree = new BinarySearchTree();
+                Assert.False(testTree.Contains(5));
+            }
+            private BinarySearchTree CreateBinarySearchTree()
+            {
+                BinarySearchTree testTree = new BinarySearchTree();
+                testTree.Add(100);
+                testTree.Add(50);
+                testTree.Add(200);
+                testTree.Add(25);
+                testTree.Add(75);
+                testTree.Add(150);
+                testTree.Add(300);
+                testTree.Add(60);
+                testTree.Add(90);
+                testTree.Add(342);
+                return testTree;
             }
 
             [Fact]
-            public void CanInstantiateTreeWithSingleRootNode()
+            public void HappyPath()
             {
-                // Arrange
-                BinarySeartchTree<int> binarySearchTree = new BinarySeartchTree<int>();
-                int rootValue = 50;
+               
+               BinarySearchTree testTree = CreateBinarySearchTree();
 
-                // Act
-                binarySearchTree.Add(rootValue);
+                int result = testTree.Max_tree();
 
-                // Assert
-                Assert.NotNull(binarySearchTree.Root);
-                Assert.Equal(rootValue, binarySearchTree.Root.Value);
-                Assert.Null(binarySearchTree.Root.Left);
-                Assert.Null(binarySearchTree.Root.Right);
+                
+                Assert.Equal(342, result);
             }
 
             [Fact]
-            public void CanAddLeftAndRightChildToNode()
+            public void Max_tree_TreeIsEmpty()
             {
-                // Arrange
-                BinarySeartchTree<int> binarySearchTree = new BinarySeartchTree<int>();
-                int rootValue = 50;
-                int leftChildValue = 30;
-                int rightChildValue = 70;
+                
+                BinarySearchTree testTree = new BinarySearchTree();
 
-                // Act
-                binarySearchTree.Add(rootValue);
-                binarySearchTree.Add(leftChildValue);
-                binarySearchTree.Add(rightChildValue);
+                int result = testTree.Max_tree();
 
-                // Assert
-                Assert.NotNull(binarySearchTree.Root.Left);
-                Assert.NotNull(binarySearchTree.Root.Right);
-                Assert.Equal(leftChildValue, binarySearchTree.Root.Left.Value);
-                Assert.Equal(rightChildValue, binarySearchTree.Root.Right.Value);
+              
+                Assert.Equal(0, result);
             }
 
             [Fact]
-            public void CanReturnCollectionFromPreOrderTraversal()
+            public void Max_tree_WhenSingleNodeTree()
             {
-                // Arrange
-                BinarySeartchTree<int> binarySearchTree = new BinarySeartchTree<int>();
-                binarySearchTree.Add(50);
-                binarySearchTree.Add(30);
-                binarySearchTree.Add(70);
-                binarySearchTree.Add(20);
-                binarySearchTree.Add(40);
-                binarySearchTree.Add(60);
-                binarySearchTree.Add(80);
+               
+                BinarySearchTree testTree = new BinarySearchTree();
+                testTree.Add(42);
 
-                // Act
-                var result = binarySearchTree.PreOrderTravarsel();
+                
+                int result = testTree.Max_tree();
 
-                // Assert
-                int[] expected = new int[] { 50, 30, 20, 40, 70, 60, 80 };
-                Assert.Equal(expected, result);
-            }
-
-            [Fact]
-            public void CanReturnCollectionFromInOrderTraversal()
-            {
-                // Arrange
-                BinarySeartchTree<int> binarySearchTree = new BinarySeartchTree<int>();
-                binarySearchTree.Add(50);
-                binarySearchTree.Add(30);
-                binarySearchTree.Add(70);
-                binarySearchTree.Add(20);
-                binarySearchTree.Add(40);
-                binarySearchTree.Add(60);
-                binarySearchTree.Add(80);
-
-                // Act
-                var result = binarySearchTree.InorderTraversal();
-
-                // Assert
-                int[] expected = new int[] { 20, 30, 40, 50, 60, 70, 80 };
-                Assert.Equal(expected, result);
-            }
-
-            [Fact]
-            public void CanReturnCollectionFromPostOrderTraversal()
-            {
-                // Arrange
-                BinarySeartchTree<int> binarySearchTree = new BinarySeartchTree<int>();
-                binarySearchTree.Add(50);
-                binarySearchTree.Add(30);
-                binarySearchTree.Add(70);
-                binarySearchTree.Add(20);
-                binarySearchTree.Add(40);
-                binarySearchTree.Add(60);
-                binarySearchTree.Add(80);
-
-                // Act
-                var result = binarySearchTree.PostorderTraversal();
-
-                // Assert
-                int[] expected = new int[] { 20, 40, 30, 60, 80, 70, 50 };
-                Assert.Equal(expected, result);
-            }
-
-            [Fact]
-            public void ContainsReturnsTrueForExistingNodeValue()
-            {
-                // Arrange
-                BinarySeartchTree<int> binarySearchTree = new BinarySeartchTree<int>();
-                binarySearchTree.Add(50);
-                binarySearchTree.Add(30);
-                binarySearchTree.Add(70);
-                binarySearchTree.Add(20);
-                binarySearchTree.Add(40);
-                binarySearchTree.Add(60);
-                binarySearchTree.Add(80);
-
-                // Act
-                bool result = binarySearchTree.Contains(40);
-
-                // Assert
-                Assert.True(result);
-            }
-
-            [Fact]
-            public void ContainsReturnsFalseForNonExistingNodeValue()
-            {
-                // Arrange
-                BinarySeartchTree<int> binarySearchTree = new BinarySeartchTree<int>();
-                binarySearchTree.Add(50);
-                binarySearchTree.Add(30);
-                binarySearchTree.Add(70);
-                binarySearchTree.Add(20);
-                binarySearchTree.Add(40);
-                binarySearchTree.Add(60);
-                binarySearchTree.Add(80);
-
-                // Act
-                bool result = binarySearchTree.Contains(90);
-
-                // Assert
-                Assert.False(result);
+                
+                Assert.Equal(42, result);
             }
         }
     }
-
-
-
-}
+        }
+   
 
 
 
