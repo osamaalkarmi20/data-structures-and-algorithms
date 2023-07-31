@@ -27,3 +27,5 @@ this repo is made to submit the code challanges .
 [challenge 13:Bracket Balanaced Checker](/data-structures-and-algorithms/BracketBalanced/README.md)
 
 [challenge 15:binary tree and bst](/data-structures-and-algorithms/trees/README.md)
+
+[challenge 16:tree_max](/data-structures-and-algorithms/trees-max/README.md)
