@@ -11,25 +11,27 @@ namespace TestReserve
         {
 
             [Fact]
-            public void BFStest()
+            public void FizzBuzzTreetest()
             {
 
 
                 BinaryTree binaryTree = new BinaryTree();
-                binaryTree.Add(2);
-                binaryTree.Add(7);
-                binaryTree.Add(5);
-                binaryTree.Add(2);
-                binaryTree.Add(6);
-                binaryTree.Add(9);
-                binaryTree.Add(5);
-                binaryTree.Add(11);
-                binaryTree.Add(4);
-
-                List<int> result = binaryTree.BFS(binaryTree.Root);
+                binaryTree.Add("2");
+                binaryTree.Add("30");
+                binaryTree.Add("5");
+                binaryTree.Add("2");
+                binaryTree.Add("6");
+                binaryTree.Add("45");
+                binaryTree.Add("5");
+                binaryTree.Add("15");
+                binaryTree.Add("1");
 
 
-                List<int> expected = new List<int> { 2, 7, 5, 2, 6, 9, 5, 11, 4 };
+                binaryTree.FizzBuzzTree();
+                List<string> result = binaryTree.BFS(binaryTree.Root);
+
+                List<string> expected = new List<string>
+                { "2", "FizzBuzz", "Buzz", "2" ,"Fizz" , "FizzBuzz", "Buzz", "FizzBuzz", "1"};
                 Assert.Equal(expected, result);
             }
         }
