@@ -29,3 +29,7 @@ this repo is made to submit the code challanges .
 [challenge 15:binary tree and bst](/data-structures-and-algorithms/trees/README.md)
 
 [challenge 16:tree_max](/data-structures-and-algorithms/tree-max/README.md)
+
+[challenge 17:Breadth first ](/data-structures-and-algorithms/tree-breadth-first/README.md)
+
+[challenge 18:fizzbuzz](/data-structures-and-algorithms/bizzFuzzTree/README.md)
