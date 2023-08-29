@@ -33,3 +33,6 @@ this repo is made to submit the code challanges .
 [challenge 17:Breadth first ](/data-structures-and-algorithms/tree-breadth-first/README.md)
 
 [challenge 18:fizzbuzz](/data-structures-and-algorithms/bizzFuzzTree/README.md)
+
+
+[challenge 26:Insertion Sortion](/data-structures-and-algorithms/InsertSort/README.md)
