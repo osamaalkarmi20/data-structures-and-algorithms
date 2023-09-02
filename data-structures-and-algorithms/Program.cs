@@ -1,11 +1,13 @@
-﻿namespace data_structures_and_algorithms
+﻿using System;
+using System.Collections.Generic;
+
+namespace data_structures_and_algorithms
 {
-
-
     public class Program
     {
         static void Main(string[] args)
         {
+
             {
                 int[] arr = { 8,4,23,42,16,15};
                 Console.WriteLine("Original array:");
@@ -41,6 +43,7 @@
                 MergeSort(right);
 
                 Merge(left, right, arr);
+
             }
         }
 
@@ -87,6 +90,9 @@
                 Console.Write(num + " ");
             }
             Console.WriteLine();
+
+            return arr;
+
         }
 
     }

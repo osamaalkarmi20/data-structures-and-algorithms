@@ -1,3 +1,4 @@
+using data_structures_and_algorithms;
 using static data_structures_and_algorithms.Program;
 
 
@@ -38,6 +39,7 @@ namespace TestReserve
                 // Assert
                 Assert.Equal(expectedMergedArr, mergedArr);
             }
+
         }
     }
 }
