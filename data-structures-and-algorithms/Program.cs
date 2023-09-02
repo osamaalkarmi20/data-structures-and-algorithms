@@ -7,35 +7,92 @@ namespace data_structures_and_algorithms
     {
         static void Main(string[] args)
         {
-           
-            int[] arr = { 8, 4, 23, 42, 16, 15 };
-            int[] arrsorted = InsertionSort(arr);
-            for (int i = 0; i < arrsorted.Length; i++) {
-                Console.WriteLine(arrsorted[i]);
-            
+
+            {
+                int[] arr = { 8,4,23,42,16,15};
+                Console.WriteLine("Original array:");
+                PrintArray(arr);
+
+                MergeSort(arr);
+
+                Console.WriteLine("\nSorted array:");
+                PrintArray(arr);
+            }
+
+        }
+        public static void MergeSort(int[] arr)
+        {
+            int n = arr.Length;
+            if (n > 1)
+            {
+                int mid = n / 2;
+                int[] left = new int[mid];
+                int[] right = new int[n - mid];
+
+                for (int i = 0; i < mid; i++)
+                {
+                    left[i] = arr[i];
+                }
+
+                for (int i = mid; i < n; i++)
+                {
+                    right[i - mid] = arr[i];
+                }
+
+                MergeSort(left);
+                MergeSort(right);
+
+                Merge(left, right, arr);
+
             }
         }
 
-        static public int[] InsertionSort(int[] arr)
+        public static void Merge(int[] left, int[] right, int[] arr)
         {
-            int key, j;
-            int n = arr.Length;
+            int i = 0, j = 0, k = 0;
+            int leftLength = left.Length;
+            int rightLength = right.Length;
 
-            for (int i = 1; i < n; i++)
+            while (i < leftLength && j < rightLength)
             {
-                key = arr[i];
-                j = i - 1;
-
-                while (j >= 0 && arr[j] > key)
+                if (left[i] <= right[j])
                 {
-                    arr[j + 1] = arr[j];
-                    j--;
+                    arr[k] = left[i];
+                    i++;
                 }
-
-                arr[j + 1] = key;
+                else
+                {
+                    arr[k] = right[j];
+                    j++;
+                }
+                k++;
             }
 
+            while (i < leftLength)
+            {
+                arr[k] = left[i];
+                i++;
+                k++;
+            }
+
+            while (j < rightLength)
+            {
+                arr[k] = right[j];
+                j++;
+                k++;
+            }
+        }
+
+        public static void PrintArray(int[] arr)
+        {
+            foreach (int num in arr)
+            {
+                Console.Write(num + " ");
+            }
+            Console.WriteLine();
+
             return arr;
+
         }
 
     }

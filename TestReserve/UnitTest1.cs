@@ -8,15 +8,38 @@ namespace TestReserve
     public class UnitTest1
     {
 
-        [Theory]
-        [InlineData(new[] { 8, 4, 23, 42, 16, 15 }, new[] { 4, 8, 15, 16, 23, 42 })]
-        [InlineData(new[] { 3, 1, 7, 2, 5 }, new[] { 1, 2, 3, 5, 7 })]
-        [InlineData(new[] { 10, 9, 8, 7, 6, 5 }, new[] { 5, 6, 7, 8, 9, 10 })]
-        
-        public void InsertionSort(int[] arr, int[] expected)
+        public class Sort
         {
-            int[] result = Program.InsertionSort(arr);
-            Assert.Equal(expected, result);
+
+            [Fact]
+        public void TestMergeSort()
+            {
+                // Arrange
+                int[] arr = { 12, 11, 13, 5, 6, 7 };
+                int[] expectedSortedArr = { 5, 6, 7, 11, 12, 13 };
+
+                // Act
+                MergeSort(arr);
+
+                // Assert
+                Assert.Equal(expectedSortedArr, arr);
+            }
+
+            [Fact]
+            public void TestMerge()
+            {
+                int[] left = { 5, 11, 13 };
+                int[] right = { 6, 7, 12 };
+                int[] expectedMergedArr = { 5, 6, 7, 11, 12, 13 };
+                int[] mergedArr = new int[left.Length + right.Length];
+
+                // Act
+           Merge(left, right, mergedArr);
+
+                // Assert
+                Assert.Equal(expectedMergedArr, mergedArr);
+            }
+
         }
     }
 }
