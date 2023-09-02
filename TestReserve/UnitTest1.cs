@@ -7,30 +7,36 @@ namespace TestReserve
     public class UnitTest1
     {
 
-        public class BinarySearchTreeTests
+        public class Sort
         {
 
             [Fact]
-            public void BFStest()
+        public void TestMergeSort()
             {
+                // Arrange
+                int[] arr = { 12, 11, 13, 5, 6, 7 };
+                int[] expectedSortedArr = { 5, 6, 7, 11, 12, 13 };
 
+                // Act
+                MergeSort(arr);
 
-                BinaryTree binaryTree = new BinaryTree();
-                binaryTree.Add(2);
-                binaryTree.Add(7);
-                binaryTree.Add(5);
-                binaryTree.Add(2);
-                binaryTree.Add(6);
-                binaryTree.Add(9);
-                binaryTree.Add(5);
-                binaryTree.Add(11);
-                binaryTree.Add(4);
+                // Assert
+                Assert.Equal(expectedSortedArr, arr);
+            }
 
-                List<int> result = binaryTree.BFS(binaryTree.Root);
+            [Fact]
+            public void TestMerge()
+            {
+                int[] left = { 5, 11, 13 };
+                int[] right = { 6, 7, 12 };
+                int[] expectedMergedArr = { 5, 6, 7, 11, 12, 13 };
+                int[] mergedArr = new int[left.Length + right.Length];
 
+                // Act
+           Merge(left, right, mergedArr);
 
-                List<int> expected = new List<int> { 2, 7, 5, 2, 6, 9, 5, 11, 4 };
-                Assert.Equal(expected, result);
+                // Assert
+                Assert.Equal(expectedMergedArr, mergedArr);
             }
         }
     }

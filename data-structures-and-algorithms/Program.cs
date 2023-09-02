@@ -7,183 +7,87 @@
         static void Main(string[] args)
         {
             {
-                BinaryTree binaryTree = new BinaryTree();
-                binaryTree.Add(2);
-                binaryTree.Add(7);
-                binaryTree.Add(5);
-                binaryTree.Add(2);
-                binaryTree.Add(6);
-                binaryTree.Add(9);
-                binaryTree.Add(5);
-                binaryTree.Add(11);
-                binaryTree.Add(4);
-                Console.WriteLine("Breadth-First Traversal: " + string.Join(" ", binaryTree.BFS(binaryTree.Root)));
+                int[] arr = { 8,4,23,42,16,15};
+                Console.WriteLine("Original array:");
+                PrintArray(arr);
 
+                MergeSort(arr);
+
+                Console.WriteLine("\nSorted array:");
+                PrintArray(arr);
             }
 
         }
-
-        public class Node
+        public static void MergeSort(int[] arr)
         {
-            public int Value { get; set; }
-
-            public Node Left { get; set; }
-
-            public Node Right { get; set; }
-
-            public Node(int value)
+            int n = arr.Length;
+            if (n > 1)
             {
-                Value = value;
-                Left = null;
-                Right = null;
+                int mid = n / 2;
+                int[] left = new int[mid];
+                int[] right = new int[n - mid];
+
+                for (int i = 0; i < mid; i++)
+                {
+                    left[i] = arr[i];
+                }
+
+                for (int i = mid; i < n; i++)
+                {
+                    right[i - mid] = arr[i];
+                }
+
+                MergeSort(left);
+                MergeSort(right);
+
+                Merge(left, right, arr);
             }
         }
-        public class BinaryTree
+
+        public static void Merge(int[] left, int[] right, int[] arr)
         {
-            public Node Root;
+            int i = 0, j = 0, k = 0;
+            int leftLength = left.Length;
+            int rightLength = right.Length;
 
-            public BinaryTree()
+            while (i < leftLength && j < rightLength)
             {
-                Root = null;
-            }
-
-            public List<int> PreOrderTravarsel()
-            {
-                List<int> result = new List<int>();
-                PreOrderTravarsel(Root, result);
-
-                return result;
-            }
-
-            public void PreOrderTravarsel(Node node, List<int> result)
-            {
-                if (node != null)
+                if (left[i] <= right[j])
                 {
-                    result.Add(node.Value);
-
-                    PreOrderTravarsel(node.Left, result);
-
-                    PreOrderTravarsel(node.Right, result);
-                }
-
-            }
-
-            public List<int> InorderTraversal()
-            {
-                List<int> result = new List<int>();
-                InorderTraversal(Root, result);
-                return result;
-            }
-
-            private void InorderTraversal(Node node, List<int> result)
-            {
-                if (node != null)
-                {
-                    InorderTraversal(node.Left, result);
-                    result.Add(node.Value);
-                    InorderTraversal(node.Right, result);
-                }
-            }
-
-
-            public List<int> PostorderTraversal()
-            {
-                List<int> result = new List<int>();
-                PostorderTraversal(Root, result);
-                return result;
-            }
-
-            private void PostorderTraversal(Node node, List<int> result)
-            {
-                if (node != null)
-                {
-                    PostorderTraversal(node.Left, result);
-                    PostorderTraversal(node.Right, result);
-                    result.Add(node.Value);
-                }
-            }
-            public int Max_tree()
-            {
-                return Max_tree(Root);
-            }
-            private int Max_tree(Node Root)
-            {
-                if (Root == null)
-                {
-                    return 0;
+                    arr[k] = left[i];
+                    i++;
                 }
                 else
                 {
-                    int max = Root.Value;
-                    int lMax = Max_tree(Root.Left);
-                    int rMax = Max_tree(Root.Right);
-                    if (max < lMax)
-                    {
-                        max = lMax;
-                    }
-                    if (max < rMax)
-                    {
-                        max = rMax;
-
-                    }
-                    return max;
-
+                    arr[k] = right[j];
+                    j++;
                 }
-
+                k++;
             }
 
-            public List<int> BFS(Node root)
+            while (i < leftLength)
             {
-                Queue<Node> queue = new Queue<Node>();
-                List<int> results = new List<int>();
-                if (root == null) return results;
-                queue.Enqueue(root);
-                while (queue.Count != 0)
-                {
-                    Node newNode = queue.Dequeue();
-                    results.Add(newNode.Value);
-                    if (newNode.Left != null)
-                    {
-                        queue.Enqueue(newNode.Left);
-                    }
-                    if (newNode.Right != null)
-                    {
-                        queue.Enqueue(newNode.Right);
-                    }
-                }
-                return results;
-
-            }
-            public void Add(int value)
-            {
-                Root = AddRecursive(Root, value);
+                arr[k] = left[i];
+                i++;
+                k++;
             }
 
-            private Node AddRecursive(Node current, int value)
+            while (j < rightLength)
             {
-                if (current == null)
-                {
-                    return new Node(value);
-                }
-
-
-                if (current.Left == null)
-                {
-                    current.Left = new Node(value);
-                }
-
-                else if (current.Right == null)
-                {
-                    current.Right = new Node(value);
-                }
-
-                else
-                {
-                    current.Left = AddRecursive(current.Left, value);
-                }
-
-                return current;
+                arr[k] = right[j];
+                j++;
+                k++;
             }
         }
+
+        public static void PrintArray(int[] arr)
+        {
+            foreach (int num in arr)
+            {
+                Console.Write(num + " ");
+            }
+            Console.WriteLine();
+        }
+
     }
 }
