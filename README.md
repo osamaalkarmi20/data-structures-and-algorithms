@@ -35,7 +35,9 @@ this repo is made to submit the code challanges .
 [challenge 18:fizzbuzz](/data-structures-and-algorithms/bizzFuzzTree/README.md)
 
 
-[challenge 26:Insertion Sortion](/data-structures-and-algorithms/mergeSort/README.md)
+[challenge 26:Insertion Sortion](/data-structures-and-algorithms/InsertionSort/README.md)
 
-[challenge 28:Insertion Sortion](/data-structures-and-algorithms/MoviesSort/README.md)
+[challenge 27:Merge Sortion](/data-structures-and-algorithms/mergSort/README.md)
+
+[challenge 28: Sort movie](/data-structures-and-algorithms/MoviesSort/README.md)
 
