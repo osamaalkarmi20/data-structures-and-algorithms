@@ -40,4 +40,5 @@ this repo is made to submit the code challanges .
 [challenge 27:Merge Sortion](/data-structures-and-algorithms/mergSort/README.md)
 
 [challenge 28: Sort movie](/data-structures-and-algorithms/MoviesSort/README.md)
+[challenge 30: Hash tables](/data-structures-and-algorithms/HashTable/README.md)
 
