@@ -1,73 +1,84 @@
-using static data_structures_and_algorithms.Program;
+
+using data_structures_and_algorithms;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
+
 
 
 namespace TestReserve
 {
 
-    public class UnitTest1
+    public class HashtableTests
     {
-
-        public class Sort
+        [Fact]
+        public void SettingKeyValueShouldRetrieveValue()
         {
-            [Fact]
-            public void SortByName_ShouldSortMoviesByTitleIgnoringArticles()
-            {
+         
+            Hashtable hashtable = new Hashtable();
 
-                var movies = new List<Movie>
-            {
-                new Movie { Title = "The Lion King" },
-                new Movie { Title = "Toy Story" },
-                new Movie { Title = "Blade Runner" },
-                new Movie { Title = "Saving Private Ryan" },
-                new Movie { Title = "Scream" }
-            };
+            
+            hashtable.Set("name", "John");
 
+            Assert.Equal("John", hashtable.Get("name"));
+        }
 
-                var sortedMovies = Sorting.SortByName(movies);
+        [Fact]
+        public void RetrieveNonExistentKeyShouldReturnNull()
+        {
+         
+            Hashtable hashtable = new Hashtable();
 
-                Assert.Equal("Blade Runner", sortedMovies[0].Title);
-                Assert.Equal("The Lion King", sortedMovies[1].Title);
-                Assert.Equal("Saving Private Ryan", sortedMovies[2].Title);
-                Assert.Equal("Scream", sortedMovies[3].Title);
-                Assert.Equal("Toy Story", sortedMovies[4].Title);
-            }
+            object result = hashtable.Get("nonexistent");
 
-            [Fact]
-            public void CompareTitles_ShouldCompareTitlesIgnoringArticles()
-            {
-                string title1 = "The Lion King";
-                string title2 = "Toy Story";
+     
+            Assert.Null(result);
+        }
 
+        [Fact]
+        public void RetrieveKeysShouldReturnUniqueKeys()
+        {
+            
+            Hashtable hashtable = new Hashtable();
+            hashtable.Set("name", "John");
+            hashtable.Set("age", 30);
+            hashtable.Set("city", "New York");
 
-                var result = Sorting.CompareTitles(title1, title2);
+            
+            List<string> keys = hashtable.Keys();
 
+            
+            Assert.Contains("name", keys);
+            Assert.Contains("age", keys);
+            Assert.Contains("city", keys);
+            Assert.Equal(3, keys.Count);
+        }
 
-                Assert.True(result < 0);
-            }
+        [Fact]
+        public void HandleCollisionWithinHashtable()
+        {
+           
+            Hashtable hashtable = new Hashtable();
 
-            [Fact]
-            public void SortByYear_ShouldSortMoviesByYear()
-            {
+            
+            hashtable.Set("name", "John");
+            hashtable.Set("eman", "Jane");
 
-                var movies = new List<Movie>
-            {
-                new Movie { Title = "The Lion King", Year = 1994 },
-                new Movie { Title = "Toy Story", Year = 1995 },
-                new Movie { Title = "Blade Runner", Year = 1982 },
-                new Movie { Title = "Saving Private Ryan", Year = 1998 },
-                new Movie { Title = "Scream", Year = 1996 }
-            };
+            
+            Assert.Equal("John", hashtable.Get("name"));
+            Assert.Equal("Jane", hashtable.Get("eman"));
+        }
 
+        [Fact]
+        public void HashKeyToInRangeValue()
+        {
+            
+            Hashtable hashtable = new Hashtable();
 
-                var sortedMovies = Sorting.SortByYear(movies);
+            
+            int hash = hashtable.CalculateHash("name");
 
+            
+            Assert.InRange(hash, 0, Hashtable.Size - 1);
 
-                Assert.Equal(1982, sortedMovies[0].Year);
-                Assert.Equal(1994, sortedMovies[1].Year);
-                Assert.Equal(1995, sortedMovies[2].Year);
-                Assert.Equal(1996, sortedMovies[3].Year);
-                Assert.Equal(1998, sortedMovies[4].Year);
-            }
         }
     }
 }
