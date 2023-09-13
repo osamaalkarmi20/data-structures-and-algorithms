@@ -1,22 +1,82 @@
 using data_structures_and_algorithms;
-using static data_structures_and_algorithms.Program;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
+
 
 
 namespace TestReserve
 {
 
-    public class UnitTest1
+    public class HashtableTests
     {
-
-        [Theory]
-        [InlineData(new[] { 8, 4, 23, 42, 16, 15 }, new[] { 4, 8, 15, 16, 23, 42 })]
-        [InlineData(new[] { 3, 1, 7, 2, 5 }, new[] { 1, 2, 3, 5, 7 })]
-        [InlineData(new[] { 10, 9, 8, 7, 6, 5 }, new[] { 5, 6, 7, 8, 9, 10 })]
-        
-        public void InsertionSort(int[] arr, int[] expected)
+        [Fact]
+        public void SettingKeyValueShouldRetrieveValue()
         {
-            int[] result = Program.InsertionSort(arr);
-            Assert.Equal(expected, result);
+         
+            Hashtable hashtable = new Hashtable();
+
+            
+            hashtable.Set("name", "John");
+
+            Assert.Equal("John", hashtable.Get("name"));
+        }
+
+        [Fact]
+        public void RetrieveNonExistentKeyShouldReturnNull()
+        {
+         
+            Hashtable hashtable = new Hashtable();
+
+            object result = hashtable.Get("nonexistent");
+
+     
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void RetrieveKeysShouldReturnUniqueKeys()
+        {
+            
+            Hashtable hashtable = new Hashtable();
+            hashtable.Set("name", "John");
+            hashtable.Set("age", 30);
+            hashtable.Set("city", "New York");
+
+            
+            List<string> keys = hashtable.Keys();
+
+            
+            Assert.Contains("name", keys);
+            Assert.Contains("age", keys);
+            Assert.Contains("city", keys);
+            Assert.Equal(3, keys.Count);
+        }
+
+        [Fact]
+        public void HandleCollisionWithinHashtable()
+        {
+           
+            Hashtable hashtable = new Hashtable();
+
+            
+            hashtable.Set("name", "John");
+            hashtable.Set("eman", "Jane");
+
+            
+            Assert.Equal("John", hashtable.Get("name"));
+            Assert.Equal("Jane", hashtable.Get("eman"));
+        }
+
+        [Fact]
+        public void HashKeyToInRangeValue()
+        {
+            
+            Hashtable hashtable = new Hashtable();
+
+            
+            int hash = hashtable.CalculateHash("name");
+
+            
+            Assert.InRange(hash, 0, Hashtable.Size - 1);
         }
     }
 }

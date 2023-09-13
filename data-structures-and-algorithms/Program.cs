@@ -3,40 +3,120 @@ using System.Collections.Generic;
 
 namespace data_structures_and_algorithms
 {
-    public class Program
+    class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-           
-            int[] arr = { 8, 4, 23, 42, 16, 15 };
-            int[] arrsorted = InsertionSort(arr);
-            for (int i = 0; i < arrsorted.Length; i++) {
-                Console.WriteLine(arrsorted[i]);
-            
-            }
+            Hashtable hashtable = new Hashtable();
+
+            hashtable.Set("name", "John");
+            hashtable.Set("age", 30);
+            hashtable.Set("city", "New York");
+
+            Console.WriteLine("Name: " + hashtable.Get("name"));
+            Console.WriteLine("Age: " + hashtable.Get("age"));
+            Console.WriteLine("Has city: " + hashtable.Has("city"));
+            Console.WriteLine("Has country: " + hashtable.Has("country"));
+
+            List<string> keys = hashtable.Keys();
+            Console.WriteLine("Keys: " + string.Join(", ", keys));
         }
+    }
 
-        static public int[] InsertionSort(int[] arr)
+    public class KeyValue
+    {
+        public string Key { get; set; }
+        public object Value { get; set; }
+    }
+
+    public class Hashtable
+    {
+        public const int Size = 100;
+        public List<List<KeyValue>> table;
+
+        public Hashtable()
         {
-            int key, j;
-            int n = arr.Length;
-
-            for (int i = 1; i < n; i++)
+            table = new List<List<KeyValue>>(Size);
+            for (int i = 0; i < Size; i++)
             {
-                key = arr[i];
-                j = i - 1;
-
-                while (j >= 0 && arr[j] > key)
-                {
-                    arr[j + 1] = arr[j];
-                    j--;
-                }
-
-                arr[j + 1] = key;
+                table.Add(new List<KeyValue>());
             }
-
-            return arr;
         }
 
+        public int CalculateHash(string key)
+        {
+            int hash = 0;
+            foreach (char c in key)
+            {
+                hash += c;
+            }
+            return hash % Size;
+        }
+
+        public void Set(string key, object value)
+        {
+            int index = CalculateHash(key);
+            List<KeyValue> bucket = table[index];
+
+            foreach (var kvp in bucket)
+            {
+                if (kvp.Key == key)
+                {
+                    kvp.Value = value;
+                    return;
+                }
+            }
+
+            bucket.Add(new KeyValue { Key = key, Value = value });
+        }
+
+        public object Get(string key)
+        {
+            int index = CalculateHash(key);
+            List<KeyValue> bucket = table[index];
+
+            foreach (var kvp in bucket)
+            {
+                if (kvp.Key == key)
+                {
+                    return kvp.Value;
+                }
+            }
+
+            return null;
+        }
+
+        public bool Has(string key)
+        {
+            int index = CalculateHash(key);
+            List<KeyValue> bucket = table[index];
+
+            foreach (var kvp in bucket)
+            {
+                if (kvp.Key == key)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public List<string> Keys()
+        {
+            List<string> keys = new List<string>();
+
+            foreach (var bucket in table)
+            {
+                foreach (var kvp in bucket)
+                {
+                    keys.Add(kvp.Key);
+                }
+            }
+
+            return keys;
+        }
+
+   
     }
 }
