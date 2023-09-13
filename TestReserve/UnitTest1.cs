@@ -1,3 +1,4 @@
+
 using data_structures_and_algorithms;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 
@@ -77,6 +78,7 @@ namespace TestReserve
 
             
             Assert.InRange(hash, 0, Hashtable.Size - 1);
+
         }
     }
 }
