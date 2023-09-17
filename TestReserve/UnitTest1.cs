@@ -7,78 +7,119 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 namespace TestReserve
 {
 
-    public class HashtableTests
-    {
-        [Fact]
-        public void SettingKeyValueShouldRetrieveValue()
+        public class UnitTest1
         {
-         
-            Hashtable hashtable = new Hashtable();
+            [Fact]
+            public void Add_ShouldAddKeyAndValue()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
+                customHashTable.Add("Key1", 42);
 
-            
-            hashtable.Set("name", "John");
+                Assert.True(customHashTable.ContainsKey("Key1"));
+                Assert.True(customHashTable.TryGetValue("Key1", out int value));
+                Assert.Equal(42, value);
+            }
 
-            Assert.Equal("John", hashtable.Get("name"));
-        }
+            [Fact]
+            public void Add_ShouldUpdateExistingKey()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
+                customHashTable.Add("Key1", 42);
 
-        [Fact]
-        public void RetrieveNonExistentKeyShouldReturnNull()
-        {
-         
-            Hashtable hashtable = new Hashtable();
+                customHashTable.Add("Key1", 24);
 
-            object result = hashtable.Get("nonexistent");
+                Assert.True(customHashTable.ContainsKey("Key1"));
+                Assert.True(customHashTable.TryGetValue("Key1", out int value));
+                Assert.Equal(24, value);
+            }
 
-     
-            Assert.Null(result);
-        }
+            [Fact]
+            public void GetHash_ShouldReturnNonNegativeHash()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
+                int hash = customHashTable.GetHash("TestKey");
 
-        [Fact]
-        public void RetrieveKeysShouldReturnUniqueKeys()
-        {
-            
-            Hashtable hashtable = new Hashtable();
-            hashtable.Set("name", "John");
-            hashtable.Set("age", 30);
-            hashtable.Set("city", "New York");
+                Assert.True(hash >= 0);
+            }
 
-            
-            List<string> keys = hashtable.Keys();
+            [Fact]
+            public void TryGetValue_ShouldReturnTrueAndCorrectValueForExistingKey()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
+                customHashTable.Add("Key1", 42);
 
-            
-            Assert.Contains("name", keys);
-            Assert.Contains("age", keys);
-            Assert.Contains("city", keys);
-            Assert.Equal(3, keys.Count);
-        }
+                bool result = customHashTable.TryGetValue("Key1", out int value);
 
-        [Fact]
-        public void HandleCollisionWithinHashtable()
-        {
-           
-            Hashtable hashtable = new Hashtable();
+                Assert.True(result);
+                Assert.Equal(42, value);
+            }
 
-            
-            hashtable.Set("name", "John");
-            hashtable.Set("eman", "Jane");
+            [Fact]
+            public void TryGetValue_ShouldReturnFalseForNonExistingKey()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
 
-            
-            Assert.Equal("John", hashtable.Get("name"));
-            Assert.Equal("Jane", hashtable.Get("eman"));
-        }
+                bool result = customHashTable.TryGetValue("NonExistentKey", out int value);
 
-        [Fact]
-        public void HashKeyToInRangeValue()
-        {
-            
-            Hashtable hashtable = new Hashtable();
+                Assert.False(result);
+            }
 
-            
-            int hash = hashtable.CalculateHash("name");
+            [Fact]
+            public void ContainsKey_ShouldReturnTrueForExistingKey()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
+                customHashTable.Add("Key1", 42);
 
-            
-            Assert.InRange(hash, 0, Hashtable.Size - 1);
+                bool result = customHashTable.ContainsKey("Key1");
+
+                Assert.True(result);
+            }
+
+            [Fact]
+            public void ContainsKey_ShouldReturnFalseForNonExistingKey()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
+
+                bool result = customHashTable.ContainsKey("NonExistentKey");
+
+                Assert.False(result);
+            }
+
+            [Fact]
+            public void FindFirstRepeatedWord_ShouldReturnFirstRepeatedWord()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
+                string input = "This is a test. This is only a test.";
+
+                string repeatedWord = customHashTable.FindFirstRepeatedWord(input);
+
+                Assert.Equal("This", repeatedWord);
+            }
+
+            [Fact]
+            public void FindFirstRepeatedWord_ShouldReturnNullForNoRepeatedWords()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
+                string input = "No repeated words in this sentence.";
+
+                string repeatedWord = customHashTable.FindFirstRepeatedWord(input);
+
+                Assert.Null(repeatedWord);
+            }
+
+            [Fact]
+            public void Keys_ShouldReturnAllKeys()
+            {
+                var customHashTable = new CustomHashTable<string, int>(100);
+                customHashTable.Add("Key1", 42);
+                customHashTable.Add("Key2", 24);
+
+                var keys = customHashTable.Keys();
+
+                Assert.Contains("Key1", keys);
+                Assert.Contains("Key2", keys);
+            }
 
         }
     }
-}
+
