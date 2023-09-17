@@ -1,122 +1,191 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace data_structures_and_algorithms
 {
     class Program
     {
-        public static void Main()
+        static void Main(string[] args)
         {
-            Hashtable hashtable = new Hashtable();
+            CustomHashTable<string, int> customHashTable = new CustomHashTable<string, int>(100);
 
-            hashtable.Set("name", "John");
-            hashtable.Set("age", 30);
-            hashtable.Set("city", "New York");
+            string input1 = "This is a test. This is only a test.";
+            string input2 = "No repeated words in this sentence.";
+            string input3 = "Another test with a repeated word. Test it.";
 
-            Console.WriteLine("Name: " + hashtable.Get("name"));
-            Console.WriteLine("Age: " + hashtable.Get("age"));
-            Console.WriteLine("Has city: " + hashtable.Has("city"));
-            Console.WriteLine("Has country: " + hashtable.Has("country"));
+            string repeatedWord1 = customHashTable.FindFirstRepeatedWord(input1);
+            string repeatedWord2 = customHashTable.FindFirstRepeatedWord(input2);
+            string repeatedWord3 = customHashTable.FindFirstRepeatedWord(input3);
 
-            List<string> keys = hashtable.Keys();
-            Console.WriteLine("Keys: " + string.Join(", ", keys));
+            Console.WriteLine("Input 1: " + input1);
+            Console.WriteLine("First Repeated Word in Input 1: " + repeatedWord1);
+
+            Console.WriteLine("Input 2: " + input2);
+            Console.WriteLine("First Repeated Word in Input 2: " + repeatedWord2);
+
+            Console.WriteLine("Input 3: " + input3);
+            Console.WriteLine("First Repeated Word in Input 3: " + repeatedWord3);
         }
     }
 
-    public class KeyValue
+    public class CustomHashTable<TKey, TValue>
     {
-        public string Key { get; set; }
-        public object Value { get; set; }
-    }
+        public int size;
+        public List<KeyValuePair<TKey, TValue>>[] buckets;
 
-    public class Hashtable
-    {
-        public const int Size = 100;
-        public List<List<KeyValue>> table;
-
-        public Hashtable()
+        public CustomHashTable(int size)
         {
-            table = new List<List<KeyValue>>(Size);
-            for (int i = 0; i < Size; i++)
-            {
-                table.Add(new List<KeyValue>());
-            }
+            this.size = size;
+            this.buckets = new List<KeyValuePair<TKey, TValue>>[size];
         }
 
-        public int CalculateHash(string key)
+        public string FindFirstRepeatedWord(string input)
         {
-            int hash = 0;
-            foreach (char c in key)
+            if (string.IsNullOrWhiteSpace(input))
             {
-                hash += c;
+                throw new ArgumentException("Input string is empty or null.");
             }
-            return hash % Size;
-        }
 
-        public void Set(string key, object value)
-        {
-            int index = CalculateHash(key);
-            List<KeyValue> bucket = table[index];
+            List<string> words = SplitStringIntoWords(input);
 
-            foreach (var kvp in bucket)
+            var wordFrequencyTable = new CustomHashTable<string, int>(words.Count);
+
+            foreach (string word in words)
             {
-                if (kvp.Key == key)
+                string lowercaseWord = word.ToLower();
+
+                if (wordFrequencyTable.ContainsKey(lowercaseWord))
                 {
-                    kvp.Value = value;
-                    return;
+                    return word;
                 }
-            }
 
-            bucket.Add(new KeyValue { Key = key, Value = value });
-        }
-
-        public object Get(string key)
-        {
-            int index = CalculateHash(key);
-            List<KeyValue> bucket = table[index];
-
-            foreach (var kvp in bucket)
-            {
-                if (kvp.Key == key)
-                {
-                    return kvp.Value;
-                }
+                wordFrequencyTable.Add(lowercaseWord, 1);
             }
 
             return null;
         }
 
-        public bool Has(string key)
+        private List<string> SplitStringIntoWords(string input)
         {
-            int index = CalculateHash(key);
-            List<KeyValue> bucket = table[index];
+            List<string> words = new List<string>();
+            StringBuilder currentWord = new StringBuilder();
 
-            foreach (var kvp in bucket)
+            foreach (char c in input)
             {
-                if (kvp.Key == key)
+                if (char.IsWhiteSpace(c) || IsPunctuation(c))
                 {
-                    return true;
+                    if (currentWord.Length > 0)
+                    {
+                        words.Add(currentWord.ToString());
+                        currentWord.Clear();
+                    }
+                }
+                else
+                {
+                    currentWord.Append(c);
+                }
+            }
+
+            if (currentWord.Length > 0)
+            {
+                words.Add(currentWord.ToString());
+            }
+
+            return words;
+        }
+
+        private bool IsPunctuation(char c)
+        {
+            char[] punctuationChars = { '.', ',', ';', '!', '?' };
+            return Array.IndexOf(punctuationChars, c) != -1;
+        }
+
+        public int GetHash(TKey key)
+        {
+            int hashCode = key.GetHashCode();
+            if (hashCode < 0)
+            {
+                hashCode = Math.Abs(hashCode);
+            }
+            return hashCode % size;
+        }
+
+        public void Add(TKey key, TValue value)
+        {
+            int index = GetHash(key);
+            if (buckets[index] == null)
+            {
+                buckets[index] = new List<KeyValuePair<TKey, TValue>>();
+            }
+
+            for (int i = 0; i < buckets[index].Count; i++)
+            {
+                if (buckets[index][i].Key.Equals(key))
+                {
+                    buckets[index][i] = new KeyValuePair<TKey, TValue>(key, value);
+                    return;
+                }
+            }
+
+            buckets[index].Add(new KeyValuePair<TKey, TValue>(key, value));
+        }
+
+        public bool TryGetValue(TKey key, out TValue value)
+        {
+            int index = GetHash(key);
+            if (buckets[index] != null)
+            {
+                foreach (var kvp in buckets[index])
+                {
+                    if (kvp.Key.Equals(key))
+                    {
+                        value = kvp.Value;
+                        return true;
+                    }
+                }
+            }
+
+            value = default(TValue);
+            return false;
+        }
+
+        public bool ContainsKey(TKey key)
+        {
+            int index = GetHash(key);
+            if (buckets[index] != null)
+            {
+                foreach (var kvp in buckets[index])
+                {
+                    if (kvp.Key.Equals(key))
+                    {
+                        return true;
+                    }
                 }
             }
 
             return false;
         }
 
-        public List<string> Keys()
+        public IEnumerable<TKey> Keys()
         {
-            List<string> keys = new List<string>();
-
-            foreach (var bucket in table)
+            var keys = new List<TKey>();
+            foreach (var bucket in buckets)
             {
-                foreach (var kvp in bucket)
+                if (bucket != null)
                 {
-                    keys.Add(kvp.Key);
+                    foreach (var kvp in bucket)
+                    {
+                        keys.Add(kvp.Key);
+                    }
                 }
             }
-
             return keys;
         }
 
-   
+        public int Hash(TKey key)
+        {
+            return GetHash(key);
+        }
     }
 }
