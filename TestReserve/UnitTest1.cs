@@ -3,10 +3,10 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 
 
-namespace Test
+namespace TestReserve
 {
 
-        public class Test
+        public class UnitTest1
         {
             [Fact]
             public void Add_ShouldAddKeyAndValue()
