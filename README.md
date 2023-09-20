@@ -42,3 +42,4 @@ this repo is made to submit the code challanges .
 [challenge 28: Sort movie](/data-structures-and-algorithms/MoviesSort/README.md)
 [challenge 30: Hash tables](/data-structures-and-algorithms/HashTable/README.md)
 
+[challenge 32: tree-intersection](/data-structures-and-algorithms/tree-intersection/README.md)
