@@ -1,191 +1,130 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace data_structures_and_algorithms
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public class Node
         {
-            CustomHashTable<string, int> customHashTable = new CustomHashTable<string, int>(100);
-
-            string input1 = "This is a test. This is only a test.";
-            string input2 = "No repeated words in this sentence.";
-            string input3 = "Another test with a repeated word. Test it.";
-
-            string repeatedWord1 = customHashTable.FindFirstRepeatedWord(input1);
-            string repeatedWord2 = customHashTable.FindFirstRepeatedWord(input2);
-            string repeatedWord3 = customHashTable.FindFirstRepeatedWord(input3);
-
-            Console.WriteLine("Input 1: " + input1);
-            Console.WriteLine("First Repeated Word in Input 1: " + repeatedWord1);
-
-            Console.WriteLine("Input 2: " + input2);
-            Console.WriteLine("First Repeated Word in Input 2: " + repeatedWord2);
-
-            Console.WriteLine("Input 3: " + input3);
-            Console.WriteLine("First Repeated Word in Input 3: " + repeatedWord3);
-        }
-    }
-
-    public class CustomHashTable<TKey, TValue>
-    {
-        public int size;
-        public List<KeyValuePair<TKey, TValue>>[] buckets;
-
-        public CustomHashTable(int size)
-        {
-            this.size = size;
-            this.buckets = new List<KeyValuePair<TKey, TValue>>[size];
+            public int key;
+            public Node left, right;
         }
 
-        public string FindFirstRepeatedWord(string input)
+        public static Node newNode(int ele)
         {
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                throw new ArgumentException("Input string is empty or null.");
-            }
-
-            List<string> words = SplitStringIntoWords(input);
-
-            var wordFrequencyTable = new CustomHashTable<string, int>(words.Count);
-
-            foreach (string word in words)
-            {
-                string lowercaseWord = word.ToLower();
-
-                if (wordFrequencyTable.ContainsKey(lowercaseWord))
-                {
-                    return word;
-                }
-
-                wordFrequencyTable.Add(lowercaseWord, 1);
-            }
-
-            return null;
+            Node temp = new Node();
+            temp.key = ele;
+            temp.left = null;
+            temp.right = null;
+            return temp;
         }
 
-        private List<string> SplitStringIntoWords(string input)
+        public static List<int> FindCommonUsingHashMap(Node root1, Node root2)
         {
-            List<string> words = new List<string>();
-            StringBuilder currentWord = new StringBuilder();
+            Dictionary<int, int> map = new Dictionary<int, int>();
 
-            foreach (char c in input)
-            {
-                if (char.IsWhiteSpace(c) || IsPunctuation(c))
-                {
-                    if (currentWord.Length > 0)
-                    {
-                        words.Add(currentWord.ToString());
-                        currentWord.Clear();
-                    }
-                }
-                else
-                {
-                    currentWord.Append(c);
-                }
-            }
+            TraverseAndStore(root1, map);
 
-            if (currentWord.Length > 0)
-            {
-                words.Add(currentWord.ToString());
-            }
-
-            return words;
+            return TraverseAndCheck(root2, map);
         }
 
-        private bool IsPunctuation(char c)
+        private static void TraverseAndStore(Node node, Dictionary<int, int> map)
         {
-            char[] punctuationChars = { '.', ',', ';', '!', '?' };
-            return Array.IndexOf(punctuationChars, c) != -1;
+            if (node == null)
+                return;
+
+            if (!map.ContainsKey(node.key))
+                map[node.key] = 1;
+
+            TraverseAndStore(node.left, map);
+            TraverseAndStore(node.right, map);
         }
 
-        public int GetHash(TKey key)
+        private static List<int> TraverseAndCheck(Node node, Dictionary<int, int> map)
         {
-            int hashCode = key.GetHashCode();
-            if (hashCode < 0)
+            List<int> commonNodes = new List<int>();
+
+            if (node == null)
+                return commonNodes;
+
+            if (map.ContainsKey(node.key))
             {
-                hashCode = Math.Abs(hashCode);
+                commonNodes.Add(node.key);
+                map.Remove(node.key);
             }
-            return hashCode % size;
+
+            commonNodes.AddRange(TraverseAndCheck(node.left, map));
+            commonNodes.AddRange(TraverseAndCheck(node.right, map));
+
+            return commonNodes;
         }
 
-        public void Add(TKey key, TValue value)
+        public static void PrintList(List<int> list)
         {
-            int index = GetHash(key);
-            if (buckets[index] == null)
+            foreach (int item in list)
             {
-                buckets[index] = new List<KeyValuePair<TKey, TValue>>();
+                Console.Write(item + " ");
             }
-
-            for (int i = 0; i < buckets[index].Count; i++)
-            {
-                if (buckets[index][i].Key.Equals(key))
-                {
-                    buckets[index][i] = new KeyValuePair<TKey, TValue>(key, value);
-                    return;
-                }
-            }
-
-            buckets[index].Add(new KeyValuePair<TKey, TValue>(key, value));
         }
 
-        public bool TryGetValue(TKey key, out TValue value)
+        public static void inorder(Node root)
         {
-            int index = GetHash(key);
-            if (buckets[index] != null)
+            if (root != null)
             {
-                foreach (var kvp in buckets[index])
-                {
-                    if (kvp.Key.Equals(key))
-                    {
-                        value = kvp.Value;
-                        return true;
-                    }
-                }
+                inorder(root.left);
+                Console.Write(root.key + " ");
+                inorder(root.right);
             }
-
-            value = default(TValue);
-            return false;
         }
 
-        public bool ContainsKey(TKey key)
+        public static Node insert(Node node, int key)
         {
-            int index = GetHash(key);
-            if (buckets[index] != null)
+            if (node == null)
             {
-                foreach (var kvp in buckets[index])
-                {
-                    if (kvp.Key.Equals(key))
-                    {
-                        return true;
-                    }
-                }
+                return newNode(key);
             }
 
-            return false;
-        }
-
-        public IEnumerable<TKey> Keys()
-        {
-            var keys = new List<TKey>();
-            foreach (var bucket in buckets)
+            if (key < node.key)
             {
-                if (bucket != null)
-                {
-                    foreach (var kvp in bucket)
-                    {
-                        keys.Add(kvp.Key);
-                    }
-                }
+                node.left = insert(node.left, key);
             }
-            return keys;
+            else if (key > node.key)
+            {
+                node.right = insert(node.right, key);
+            }
+
+            return node;
         }
 
-        public int Hash(TKey key)
+        public static void Main(string[] args)
         {
-            return GetHash(key);
+            Node root1 = null;
+            root1 = insert(root1, 5);
+            root1 = insert(root1, 1);
+            root1 = insert(root1, 10);
+            root1 = insert(root1, 0);
+            root1 = insert(root1, 4);
+            root1 = insert(root1, 7);
+            root1 = insert(root1, 9);
+
+            Node root2 = null;
+            root2 = insert(root2, 10);
+            root2 = insert(root2, 7);
+            root2 = insert(root2, 20);
+            root2 = insert(root2, 4);
+            root2 = insert(root2, 9);
+
+            Console.Write("Tree 1 : " + "\n");
+            inorder(root1);
+            Console.WriteLine();
+            Console.Write("Tree 2 : " + "\n");
+            inorder(root2);
+            Console.WriteLine();
+            Console.Write("Common Nodes: " + "\n");
+
+            List<int> commonNodes = FindCommonUsingHashMap(root1, root2);
+            PrintList(commonNodes);
         }
     }
 }
