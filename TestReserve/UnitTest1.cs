@@ -8,62 +8,69 @@ namespace TestReserve
     public class UnitTest1
     {
 
+
         [Fact]
-        public void FindCommonUsingHashMap_ShouldFindCommonNodes()
+        public void CheckWithValidInput()
         {
+            Dictionary<string, string> synonymsHashTable = new Dictionary<string, string>
+        {
+            { "diligent", "employed" },
+            { "fond", "enamored" },
+            { "guide", "usher" },
+            { "outfit", "garb" },
+            { "wrath", "anger" }
+        };
 
-            Node root1 = null;
-            root1 = insert(root1, 5);
-            root1 = insert(root1, 1);
-            root1 = insert(root1, 10);
-            root1 = insert(root1, 0);
-            root1 = insert(root1, 4);
-            root1 = insert(root1, 7);
-            root1 = insert(root1, 9);
+            Dictionary<string, string> antonymsHashTable = new Dictionary<string, string>
+        {
+            { "diligent", "idle" },
+            { "fond", "averse" },
+            { "guide", "follow" },
+            { "flow", "jam" },
+            { "wrath", "delight" }
+        };
 
-            Node root2 = null;
-            root2 = insert(root2, 10);
-            root2 = insert(root2, 7);
-            root2 = insert(root2, 20);
-            root2 = insert(root2, 4);
-            root2 = insert(root2, 9);
+            List<List<string>> expected = new List<List<string>>
+        {
+            new List<string> { "diligent", "employed", "idle" },
+            new List<string> { "fond", "enamored", "averse" },
+            new List<string> { "guide", "usher", "follow" },
+            new List<string> { "outfit", "garb", null },
+            new List<string> { "wrath", "anger", "delight" }
+        };
 
-            List<int> expectedCommonNodes = new List<int> { 10, 7, 4, 9 };
+            List<List<string>> result = LeftJoin(synonymsHashTable, antonymsHashTable);
 
-
-            List<int> actualCommonNodes = FindCommonUsingHashMap(root1, root2);
-
-            Assert.Equal(expectedCommonNodes, actualCommonNodes);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
-        public void Insert_ShouldInsertNodeCorrectly()
+        public void CheckWithEmptyInput()
         {
+            Dictionary<string, string> synonymsHashTable = new Dictionary<string, string>();
+            Dictionary<string, string> antonymsHashTable = new Dictionary<string, string>();
 
-            Node root = null;
-            root = insert(root, 5);
+            List<List<string>> expected = new List<List<string>>();
 
-            Node newNode = insert(root, 3);
+            List<List<string>> result = LeftJoin(synonymsHashTable, antonymsHashTable);
 
-            Assert.Equal(5, newNode.key);
-            Assert.NotNull(newNode.left);
-            Assert.Null(newNode.right);
+            Assert.Equal(expected, result);
         }
 
-
-
-        [Fact]
-        public void FindCommonUsingHashMap_EmptyTrees_ShouldReturnEmptyList()
+        public List<List<string>> LeftJoin(Dictionary<string, string> synonyms, Dictionary<string, string> antonyms)
         {
+            List<List<string>> result = new List<List<string>>();
 
-            Node root1 = null;
-            Node root2 = null;
+            foreach (var key in synonyms.Keys)
+            {
+                string synonymValue = synonyms[key];
+                string antonymValue = antonyms.ContainsKey(key) ? antonyms[key] : null;
 
+                List<string> row = new List<string> { key, synonymValue, antonymValue };
+                result.Add(row);
+            }
 
-
-            List<int> actualCommonNodes = FindCommonUsingHashMap(root1, root2);
-
-            Assert.Empty(actualCommonNodes);
+            return result;
         }
     }
 }
