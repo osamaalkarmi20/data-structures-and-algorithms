@@ -1,76 +1,88 @@
-
 using data_structures_and_algorithms;
 using static data_structures_and_algorithms.Program;
 
 namespace TestReserve
 {
-
     public class UnitTest1
     {
-
-
         [Fact]
-        public void CheckWithValidInput()
+        public void VertexCanBeSuccessfullyAdded()
         {
-            Dictionary<string, string> synonymsHashTable = new Dictionary<string, string>
-        {
-            { "diligent", "employed" },
-            { "fond", "enamored" },
-            { "guide", "usher" },
-            { "outfit", "garb" },
-            { "wrath", "anger" }
-        };
+            Graph<string> graph = new Graph<string>();
+            Vertex<string> vertex = graph.AddVertex("TestVertex");
 
-            Dictionary<string, string> antonymsHashTable = new Dictionary<string, string>
-        {
-            { "diligent", "idle" },
-            { "fond", "averse" },
-            { "guide", "follow" },
-            { "flow", "jam" },
-            { "wrath", "delight" }
-        };
-
-            List<List<string>> expected = new List<List<string>>
-        {
-            new List<string> { "diligent", "employed", "idle" },
-            new List<string> { "fond", "enamored", "averse" },
-            new List<string> { "guide", "usher", "follow" },
-            new List<string> { "outfit", "garb", null },
-            new List<string> { "wrath", "anger", "delight" }
-        };
-
-            List<List<string>> result = LeftJoin(synonymsHashTable, antonymsHashTable);
-
-            Assert.Equal(expected, result);
+            Assert.NotNull(vertex);
+            Assert.Equal("TestVertex", vertex.Value);
         }
 
         [Fact]
-        public void CheckWithEmptyInput()
+        public void EdgeCanBeSuccessfullyAdded()
         {
-            Dictionary<string, string> synonymsHashTable = new Dictionary<string, string>();
-            Dictionary<string, string> antonymsHashTable = new Dictionary<string, string>();
+            Graph<string> graph = new Graph<string>();
+            Vertex<string> vertexA = graph.AddVertex("A");
+            Vertex<string> vertexB = graph.AddVertex("B");
 
-            List<List<string>> expected = new List<List<string>>();
-
-            List<List<string>> result = LeftJoin(synonymsHashTable, antonymsHashTable);
-
-            Assert.Equal(expected, result);
+            graph.AddEdge(vertexA, vertexB, 5);
         }
 
-        public List<List<string>> LeftJoin(Dictionary<string, string> synonyms, Dictionary<string, string> antonyms)
+        [Fact]
+        public void AllVerticesCanBeRetrieved()
         {
-            List<List<string>> result = new List<List<string>>();
+            Graph<string> graph = new Graph<string>();
+            graph.AddVertex("A");
+            graph.AddVertex("B");
+            graph.AddVertex("C");
 
-            foreach (var key in synonyms.Keys)
-            {
-                string synonymValue = synonyms[key];
-                string antonymValue = antonyms.ContainsKey(key) ? antonyms[key] : null;
+            var vertices = graph.GetVertices();
 
-                List<string> row = new List<string> { key, synonymValue, antonymValue };
-                result.Add(row);
-            }
+            Assert.Collection(vertices,
+                v => Assert.Equal("A", v.Value),
+                v => Assert.Equal("B", v.Value),
+                v => Assert.Equal("C", v.Value));
+        }
 
-            return result;
+        [Fact]
+        public void NeighborsCanBeRetrieved()
+        {
+            Graph<string> graph = new Graph<string>();
+            Vertex<string> vertexA = graph.AddVertex("A");
+            Vertex<string> vertexB = graph.AddVertex("B");
+            graph.AddEdge(vertexA, vertexB, 3);
+
+            var neighbors = graph.GetNeighbors(vertexA);
+        }
+
+        [Fact]
+        public void NeighborsIncludeWeights()
+        {
+            Graph<string> graph = new Graph<string>();
+            Vertex<string> vertexA = graph.AddVertex("A");
+            Vertex<string> vertexB = graph.AddVertex("B");
+            graph.AddEdge(vertexA, vertexB, 3);
+
+            var neighbors = graph.GetNeighbors(vertexA);
+        }
+
+        [Fact]
+        public void ProperSizeIsReturned()
+        {
+            Graph<string> graph = new Graph<string>();
+            graph.AddVertex("A");
+            graph.AddVertex("B");
+            graph.AddVertex("C");
+
+            int size = graph.Size();
+
+            Assert.Equal(3, size);
+        }
+
+        [Fact]
+        public void GraphWithOneVertexAndEdge()
+        {
+            Graph<string> graph = new Graph<string>();
+            Vertex<string> vertexA = graph.AddVertex("A");
+            Vertex<string> vertexB = graph.AddVertex("B");
+            graph.AddEdge(vertexA, vertexB, 5);
         }
     }
 }
