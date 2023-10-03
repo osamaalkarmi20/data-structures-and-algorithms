@@ -5,84 +5,96 @@ namespace TestReserve
 {
     public class UnitTest1
     {
-        [Fact]
-        public void VertexCanBeSuccessfullyAdded()
-        {
-            Graph<string> graph = new Graph<string>();
-            Vertex<string> vertex = graph.AddVertex("TestVertex");
 
-            Assert.NotNull(vertex);
-            Assert.Equal("TestVertex", vertex.Value);
+
+        [Fact]
+        public void AddEdge_ShouldAddEdgeBetweenVertices()
+        {
+            var graph = new Graph<string>();
+            var vertex1 = graph.AddVertex("A");
+            var vertex2 = graph.AddVertex("B");
+
+            graph.AddEdge(vertex1, vertex2);
+
+            var neighborsOfVertex1 = graph.GetNeighbors(vertex1);
+            var neighborsOfVertex2 = graph.GetNeighbors(vertex2);
+
+            Assert.Single(neighborsOfVertex1);
+            Assert.Single(neighborsOfVertex2);
+            Assert.Equal(vertex2.Value, neighborsOfVertex1.First().Vertex.Value);
+            Assert.Equal(vertex1.Value, neighborsOfVertex2.First().Vertex.Value);
         }
 
         [Fact]
-        public void EdgeCanBeSuccessfullyAdded()
+        public void GetVertices_ShouldReturnAllVerticesInGraph()
         {
-            Graph<string> graph = new Graph<string>();
-            Vertex<string> vertexA = graph.AddVertex("A");
-            Vertex<string> vertexB = graph.AddVertex("B");
-
-            graph.AddEdge(vertexA, vertexB, 5);
-        }
-
-        [Fact]
-        public void AllVerticesCanBeRetrieved()
-        {
-            Graph<string> graph = new Graph<string>();
-            graph.AddVertex("A");
-            graph.AddVertex("B");
-            graph.AddVertex("C");
+            var graph = new Graph<char>();
+            var vertex1 = graph.AddVertex('A');
+            var vertex2 = graph.AddVertex('B');
+            var vertex3 = graph.AddVertex('C');
 
             var vertices = graph.GetVertices();
 
-            Assert.Collection(vertices,
-                v => Assert.Equal("A", v.Value),
-                v => Assert.Equal("B", v.Value),
-                v => Assert.Equal("C", v.Value));
+            Assert.Equal(3, vertices.Count);
+            Assert.Contains(vertex1, vertices);
+            Assert.Contains(vertex2, vertices);
+            Assert.Contains(vertex3, vertices);
         }
 
         [Fact]
-        public void NeighborsCanBeRetrieved()
+        public void GetNeighbors_ShouldReturnNeighborsOfVertex()
         {
-            Graph<string> graph = new Graph<string>();
-            Vertex<string> vertexA = graph.AddVertex("A");
-            Vertex<string> vertexB = graph.AddVertex("B");
-            graph.AddEdge(vertexA, vertexB, 3);
+            var graph = new Graph<int>();
+            var vertex1 = graph.AddVertex(1);
+            var vertex2 = graph.AddVertex(2);
+            var vertex3 = graph.AddVertex(3);
+            graph.AddEdge(vertex1, vertex2, 10);
+            graph.AddEdge(vertex1, vertex3, 20);
 
-            var neighbors = graph.GetNeighbors(vertexA);
+            var neighborsOfVertex1 = graph.GetNeighbors(vertex1);
+
+            Assert.Equal(2, neighborsOfVertex1.Count);
+            Assert.Contains(neighborsOfVertex1, edge => edge.Vertex.Value == vertex2.Value && edge.Weight == 10);
+            Assert.Contains(neighborsOfVertex1, edge => edge.Vertex.Value == vertex3.Value && edge.Weight == 20);
+        }
+ 
+        [Fact]
+        public void BreadthFirstTraversalShouldTraverseInCorrectOrder()
+        {
+            var graph = new Graph<string>();
+            var vertexA = graph.AddVertex("Pandora");
+            var vertexB = graph.AddVertex("Arendelle");
+            var vertexC = graph.AddVertex("Metroville");
+            var vertexD = graph.AddVertex("Monstroplolis");
+            var vertexE = graph.AddVertex("Narnia");
+            var vertexF = graph.AddVertex("Naboo");
+
+            graph.AddEdge(vertexA, vertexB);
+            graph.AddEdge(vertexB, vertexC);
+            graph.AddEdge(vertexC, vertexD);
+            graph.AddEdge(vertexD, vertexE);
+            graph.AddEdge(vertexE, vertexF);
+
+            var result = graph.BreadthFirstTraversal(vertexA);
+
+            Assert.Collection(result,
+                vertex => Assert.Equal("Pandora", vertex.Value),
+                vertex => Assert.Equal("Arendelle", vertex.Value),
+                vertex => Assert.Equal("Metroville", vertex.Value),
+                vertex => Assert.Equal("Monstroplolis", vertex.Value),
+                vertex => Assert.Equal("Narnia", vertex.Value),
+                vertex => Assert.Equal("Naboo", vertex.Value)
+            );
         }
 
         [Fact]
-        public void NeighborsIncludeWeights()
+        public void BreadthFirstTraversalInvalidStartVertexShouldThrowException()
         {
-            Graph<string> graph = new Graph<string>();
-            Vertex<string> vertexA = graph.AddVertex("A");
-            Vertex<string> vertexB = graph.AddVertex("B");
-            graph.AddEdge(vertexA, vertexB, 3);
+            var graph = new Graph<string>();
+            var invalidVertex = new Vertex<string>("InvalidVertex");
 
-            var neighbors = graph.GetNeighbors(vertexA);
-        }
-
-        [Fact]
-        public void ProperSizeIsReturned()
-        {
-            Graph<string> graph = new Graph<string>();
-            graph.AddVertex("A");
-            graph.AddVertex("B");
-            graph.AddVertex("C");
-
-            int size = graph.Size();
-
-            Assert.Equal(3, size);
-        }
-
-        [Fact]
-        public void GraphWithOneVertexAndEdge()
-        {
-            Graph<string> graph = new Graph<string>();
-            Vertex<string> vertexA = graph.AddVertex("A");
-            Vertex<string> vertexB = graph.AddVertex("B");
-            graph.AddEdge(vertexA, vertexB, 5);
+            var exception = Assert.Throws<InvalidOperationException>(() => graph.BreadthFirstTraversal(invalidVertex));
+            Assert.Equal("Start vertex is not in the graph.", exception.Message);
         }
     }
 }

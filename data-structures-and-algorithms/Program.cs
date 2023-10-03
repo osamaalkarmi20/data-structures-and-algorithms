@@ -33,6 +33,16 @@ namespace data_structures_and_algorithms
             }
 
             Console.WriteLine("\nSize of the graph: " + graph.Size());
+
+
+            Console.WriteLine("Breadth-First Traversal:");
+            var bfsOrder = graph.BreadthFirstTraversal(d);
+            foreach (var vertex in bfsOrder)
+            {
+                Console.Write($"{vertex.Value} ");
+            }
+            Console.WriteLine();
+
         }
 
 
@@ -55,7 +65,35 @@ namespace data_structures_and_algorithms
         public class Graph<T>
         {
             public Dictionary<Vertex<T>, List<Edge<T>>> AdjacencyList { get; set; }
+            public ICollection<Vertex<T>> BreadthFirstTraversal(Vertex<T> startVertex)
+            {
+                if (!AdjacencyList.ContainsKey(startVertex))
+                    throw new InvalidOperationException("Start vertex is not in the graph.");
 
+                List<Vertex<T>> visitedNodes = new List<Vertex<T>>();
+                Queue<Vertex<T>> queue = new Queue<Vertex<T>>();
+                HashSet<Vertex<T>> visited = new HashSet<Vertex<T>>();
+
+                queue.Enqueue(startVertex);
+                visited.Add(startVertex);
+
+                while (queue.Count > 0)
+                {
+                    var currentVertex = queue.Dequeue();
+                    visitedNodes.Add(currentVertex);
+
+                    foreach (var edge in AdjacencyList[currentVertex])
+                    {
+                        if (!visited.Contains(edge.Vertex))
+                        {
+                            visited.Add(edge.Vertex);
+                            queue.Enqueue(edge.Vertex);
+                        }
+                    }
+                }
+
+                return visitedNodes;
+            }
             public Graph()
             {
                 AdjacencyList = new Dictionary<Vertex<T>, List<Edge<T>>>();
