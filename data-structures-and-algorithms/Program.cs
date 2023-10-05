@@ -7,43 +7,41 @@ namespace data_structures_and_algorithms
     {
         static void Main(string[] args)
         {
-            Graph<string> graph = new Graph<string>();
+            // Create a new graph
+            Graph<string> newGraph = new Graph<string>();
 
-            Vertex<string> pandora = graph.AddVertex("Pandora");
-            Vertex<string> arendelle = graph.AddVertex("Arendelle");
-            Vertex<string> metroville = graph.AddVertex("Metroville");
-            Vertex<string> monstropolis = graph.AddVertex("New Monstropolis");
-            Vertex<string> naboo = graph.AddVertex("Naboo");
-            Vertex<string> narnia = graph.AddVertex("Narnia");
+            Vertex<string> A = newGraph.AddVertex("A");
+            Vertex<string> B = newGraph.AddVertex("B");
+            Vertex<string> C = newGraph.AddVertex("C");
+            Vertex<string> D = newGraph.AddVertex("D");
+            Vertex<string> E = newGraph.AddVertex("E");
+            Vertex<string> F = newGraph.AddVertex("F");
+            Vertex<string> G = newGraph.AddVertex("G");
+            Vertex<string> H = newGraph.AddVertex("H");
 
-            graph.AddEdge(pandora, arendelle, 150);
-            graph.AddEdge(pandora, metroville, 82);
-            graph.AddEdge(arendelle, metroville, 99);
-            graph.AddEdge(arendelle, monstropolis, 42);
-            graph.AddEdge(monstropolis, metroville, 105);
-            graph.AddEdge(monstropolis, naboo, 73);
-            graph.AddEdge(metroville, naboo, 26);
-            graph.AddEdge(naboo, narnia, 250);
-            graph.AddEdge(narnia, metroville, 37);
+            newGraph.AddEdge(A, B);
+            newGraph.AddEdge(A, D);
+            newGraph.AddEdge(B, A);
+            newGraph.AddEdge(B, D);
+            newGraph.AddEdge(B, C);
+            newGraph.AddEdge(C, B);
+            newGraph.AddEdge(C, G);
+            newGraph.AddEdge(D, B);
+            newGraph.AddEdge(D, A);
+            newGraph.AddEdge(D, F);
+            newGraph.AddEdge(D, E);
+            newGraph.AddEdge(D, H);
+            newGraph.AddEdge(H, F);
+            newGraph.AddEdge(H, D);
 
-            // ... (previous code)
+            // Perform depth-first traversal starting from A
+            var depthFirstTraversal = newGraph.DepthFirstTraversal(A);
 
-            // Inputs and Outputs
-            string[] input1 = { "Metroville", "Pandora" };
-            int? cost1 = BusinessTrip(graph, input1);
-            Console.WriteLine($"Cost of trip 1: ${cost1}");
-
-            string[] input2 = { "Arendelle", "New Monstropolis", "Naboo" };
-            int? cost2 = BusinessTrip(graph, input2);
-            Console.WriteLine($"Cost of trip 2: ${cost2}");
-
-            string[] input3 = { "Naboo", "Pandora" };
-            int? cost3 = BusinessTrip(graph, input3);
-            Console.WriteLine($"Cost of trip 3: {cost3}");
-
-            string[] input4 = { "Narnia", "Arendelle", "Naboo" };
-            int? cost4 = BusinessTrip(graph, input4);
-            Console.WriteLine($"Cost of trip 4: {cost4}");
+            Console.WriteLine("Depth-First Traversal from A:");
+            foreach (var vertex in depthFirstTraversal)
+            {
+                Console.Write($"{vertex.Value} => ");
+            }
         }
 
         public static int? BusinessTrip(Graph<string> graph, string[] cityNames)
@@ -119,6 +117,33 @@ namespace data_structures_and_algorithms
         public class Graph<T>
         {
             public Dictionary<Vertex<T>, List<Edge<T>>> AdjacencyList { get; set; }
+
+            public ICollection<Vertex<T>> DepthFirstTraversal(Vertex<T> startVertex)
+            {
+                if (!AdjacencyList.ContainsKey(startVertex))
+                    throw new InvalidOperationException("Start vertex is not in the graph.");
+
+                List<Vertex<T>> visitedNodes = new List<Vertex<T>>();
+                HashSet<Vertex<T>> visited = new HashSet<Vertex<T>>();
+
+                DepthFirstTraversalRecursive(startVertex, visitedNodes, visited);
+
+                return visitedNodes;
+            }
+
+            private void DepthFirstTraversalRecursive(Vertex<T> currentVertex, List<Vertex<T>> visitedNodes, HashSet<Vertex<T>> visited)
+            {
+                visitedNodes.Add(currentVertex);
+                visited.Add(currentVertex);
+
+                foreach (var edge in AdjacencyList[currentVertex])
+                {
+                    if (!visited.Contains(edge.Vertex))
+                    {
+                        DepthFirstTraversalRecursive(edge.Vertex, visitedNodes, visited);
+                    }
+                }
+            }
             public ICollection<Vertex<T>> BreadthFirstTraversal(Vertex<T> startVertex)
             {
                 if (!AdjacencyList.ContainsKey(startVertex))
