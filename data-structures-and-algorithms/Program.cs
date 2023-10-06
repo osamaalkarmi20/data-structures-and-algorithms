@@ -5,44 +5,37 @@ namespace data_structures_and_algorithms
 {
     public class Program
     {
+
         static void Main(string[] args)
         {
-            // Create a new graph
-            Graph<string> newGraph = new Graph<string>();
+            Graph<char> graph = new Graph<char>();
 
-            Vertex<string> A = newGraph.AddVertex("A");
-            Vertex<string> B = newGraph.AddVertex("B");
-            Vertex<string> C = newGraph.AddVertex("C");
-            Vertex<string> D = newGraph.AddVertex("D");
-            Vertex<string> E = newGraph.AddVertex("E");
-            Vertex<string> F = newGraph.AddVertex("F");
-            Vertex<string> G = newGraph.AddVertex("G");
-            Vertex<string> H = newGraph.AddVertex("H");
+            var A = graph.AddVertex('A');
+            var B = graph.AddVertex('B');
+            var C = graph.AddVertex('C');
+            var D = graph.AddVertex('D');
+            var E = graph.AddVertex('E');
+            var F = graph.AddVertex('F');
+            var G = graph.AddVertex('G');
+            var H = graph.AddVertex('H');
 
-            newGraph.AddEdge(A, B);
-            newGraph.AddEdge(A, D);
-            newGraph.AddEdge(B, A);
-            newGraph.AddEdge(B, D);
-            newGraph.AddEdge(B, C);
-            newGraph.AddEdge(C, B);
-            newGraph.AddEdge(C, G);
-            newGraph.AddEdge(D, B);
-            newGraph.AddEdge(D, A);
-            newGraph.AddEdge(D, F);
-            newGraph.AddEdge(D, E);
-            newGraph.AddEdge(D, H);
-            newGraph.AddEdge(H, F);
-            newGraph.AddEdge(H, D);
+            graph.AddEdge(A, B);
+            graph.AddEdge(B, C);
+            graph.AddEdge(B, D);
+            graph.AddEdge(C, G);
+            graph.AddEdge(D, E);
+            graph.AddEdge(D, H);
+            graph.AddEdge(D, F);
+            graph.AddEdge(E, H);
 
-            // Perform depth-first traversal starting from A
-            var depthFirstTraversal = newGraph.DepthFirstTraversal(A);
-
-            Console.WriteLine("Depth-First Traversal from A:");
-            foreach (var vertex in depthFirstTraversal)
+            Console.WriteLine("Depth-First Traversal:");
+            var traversalOrder = graph.DepthFirst(A);
+            foreach (var traversal in traversalOrder)
             {
-                Console.Write($"{vertex.Value} => ");
+                Console.Write($"{ traversal.Value},");
             }
         }
+
 
         public static int? BusinessTrip(Graph<string> graph, string[] cityNames)
         {
@@ -118,32 +111,35 @@ namespace data_structures_and_algorithms
         {
             public Dictionary<Vertex<T>, List<Edge<T>>> AdjacencyList { get; set; }
 
-            public ICollection<Vertex<T>> DepthFirstTraversal(Vertex<T> startVertex)
-            {
-                if (!AdjacencyList.ContainsKey(startVertex))
-                    throw new InvalidOperationException("Start vertex is not in the graph.");
 
-                List<Vertex<T>> visitedNodes = new List<Vertex<T>>();
+            public List<Vertex<T>> DepthFirst(Vertex<T> startNode)
+            {
+                List<Vertex<T>> result = new List<Vertex<T>>();
                 HashSet<Vertex<T>> visited = new HashSet<Vertex<T>>();
 
-                DepthFirstTraversalRecursive(startVertex, visitedNodes, visited);
+                DepthFirstRecursive(startNode, visited, result);
 
-                return visitedNodes;
+             
+
+                return result;
             }
 
-            private void DepthFirstTraversalRecursive(Vertex<T> currentVertex, List<Vertex<T>> visitedNodes, HashSet<Vertex<T>> visited)
+            private void DepthFirstRecursive(Vertex<T> current, HashSet<Vertex<T>> visited, List<Vertex<T>> result)
             {
-                visitedNodes.Add(currentVertex);
-                visited.Add(currentVertex);
+                if (current == null || visited.Contains(current))
+                    return;
 
-                foreach (var edge in AdjacencyList[currentVertex])
+                visited.Add(current);
+                result.Add(current);
+
+                List<Edge<T>> neighbors = GetNeighbors(current);
+                foreach (var neighbor in neighbors)
                 {
-                    if (!visited.Contains(edge.Vertex))
-                    {
-                        DepthFirstTraversalRecursive(edge.Vertex, visitedNodes, visited);
-                    }
+                    DepthFirstRecursive(neighbor.Vertex, visited, result);
                 }
             }
+
+
             public ICollection<Vertex<T>> BreadthFirstTraversal(Vertex<T> startVertex)
             {
                 if (!AdjacencyList.ContainsKey(startVertex))
